@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+/* 미디어쿼리 */
+
+/* Tablet */
+@mixin tablet {
+    @media (min-width: #{$breakpoint-tablet}) {
+        @content;
+    }
+}
+
+/* Desktop */
+@mixin desktop {
+    @media (min-width: #{$breakpoint-desktop}) {
+        @content;
+    }
+}

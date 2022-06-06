@@ -1,0 +1,16 @@
+$notosans: 'Roboto', 'NotoSansKR', Arial, AppleGothic, verdana, sans-serif;
+$path-img: '/images/';
+$path-img-common: $path-img + 'common/';
+$path-img-ico: $path-img + 'ico/';
+$path-img-bg: $path-img + 'bg/';
+
+$main-color: #CC0100;
+
+$font-bold: 700;
+$font-medium: 500;
+$font-regular: 400;
+
+/* 미디어쿼리 */
+$breakpoint-mobile: 360px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
