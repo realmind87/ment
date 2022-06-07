@@ -3,11 +3,10 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { userSlice } from './slices/user';
 import { postSlice } from './slices/post';
 import { librarySlice } from './slices/library';
+import backUrl from '../config'
 
 import axios from 'axios';
-//axios.defaults.baseURL = 'http://east-zero.com:3065/';
-axios.defaults.baseURL = 'http://api.eastzero-blog.com';
-//axios.defaults.baseURL = 'http://localhost:80/';
+axios.defaults.baseURL = backUrl;
 axios.defaults.withCredentials = true;
 
 const reducer = (state, action) => {

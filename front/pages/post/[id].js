@@ -11,6 +11,7 @@ import { userInfo } from '../../reducers/actions/auth';
 import { librarySelector } from '../../reducers/slices/library';
 import { userSelector } from '../../reducers/slices/user';
 import { removePost } from '../../reducers/actions/post';
+import backUrl from '../../config'
 
 function Post() {
   const router = useRouter();
@@ -45,7 +46,7 @@ function Post() {
         detail.Images.length > 0 &&
         detail.Images.map((img, index) => (
           <div key={index} className="visual">
-            <img src={`http://3.39.21.89/${img.src}`} />
+            <img src={`${backUrl}/${img.src}`} />
           </div>
         ))}
       <section className="content">

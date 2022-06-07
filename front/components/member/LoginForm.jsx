@@ -8,7 +8,7 @@ import validation from '../../hooks/validation';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { loginDone, loginError, user } = useSelector(userSelector);
+  const { loginError, user } = useSelector(userSelector);
   const router = useRouter();
 
   const [userId, setUserId] = useState('');

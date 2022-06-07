@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../reducers/actions/auth';
-import { userSelector, clearSignupState } from '../../reducers/slices/user';
+import { register, login } from '../../reducers/actions/auth';
+import { userSelector } from '../../reducers/slices/user';
 import { useRouter } from 'next/router';
 
 import validation from '../../hooks/validation';
 
 const SiginupForm = () => {
   const dispatch = useDispatch();
-  const { signupDone, signupError } = useSelector(userSelector);
+  const { signupDone, signupError, user } = useSelector(userSelector);
   const router = useRouter();
 
   const [step, setStep] = useState('user');
@@ -154,15 +154,20 @@ const SiginupForm = () => {
     const userid = userId;
     const email = userEmail;
     dispatch(register({ userid, email, password }));
+
   }, [userId, userEmail, password, passwordCheck]);
 
   // 회원가입 성공시
   useEffect(() => {
-    if (signupDone) {
+    console.log(`signupDone: ${signupDone}`);
+    if (signupDone) dispatch(login({ userid: userId, password }));
+  }, [signupDone]);
+
+  useEffect(() => {
+    if (user) {
       router.replace('/');
     }
-    return () => dispatch(clearSignupState());
-  }, [signupDone]);
+  }, [user]);
 
   // 회원가입 오류시
   useEffect(() => {

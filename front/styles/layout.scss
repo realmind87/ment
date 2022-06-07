@@ -803,7 +803,7 @@ body {
         margin: 0 auto;
         position: relative;
         height: 6rem;
-        padding: 0 2rem;
+        padding: 0;
         border-bottom: none;
 
         .tnb {
@@ -859,8 +859,9 @@ body {
 
     .auth-container {
       position: fixed;
-      top: calc(50% - (500px / 2));
-      left: calc(50% - (400px / 2));
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-300px);
       width: 500px;
       height: 400px;
       padding: 4rem 2rem 0rem;
@@ -926,7 +927,7 @@ body {
     position: fixed;
     top: 70px;
     left: auto;
-    right: calc(50% - 380px);
+    right: calc(50% - 400px);
     width: 150px;
     height: auto;
     background-color: transparent;
@@ -1009,11 +1010,12 @@ body {
   .modal-wrap {
     width: 100%;
     height: 100%;
-  
+    
     &__form {
       width: 600px;
-      bottom: calc(50% / 2);
-      left: calc(50% / 2);
+      bottom: 50%;
+      left: 50%;
+      transform: translateY(100px) translateX(-50%);
       padding: 0 0 2rem 0;
     }
 

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
+import backUrl from '../../config'
 
 const List = ({ id, title, content, images }) => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const List = ({ id, title, content, images }) => {
     <div className="post-box" onClick={() => onRouterDetail(id)}>
       {images && images.length > 0 && (
         <div className="post-box__thumb">
-          <img src={`http://3.39.21.89/${images[0].src}`} />
+          <img src={`${backUrl}/${images[0].src}`} />
         </div>
       )}
       <div className="post-box__area">

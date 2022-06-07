@@ -9,6 +9,7 @@ import {
   uploadImages,
   imageRemove,
 } from '../../reducers/actions/post';
+import backUrl from '../../config'
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -124,7 +125,7 @@ const PostForm = () => {
                           imagePaths.map((img, index) => (
                             <div key={index} className="img-pre-view">
                               <div className="img-area">
-                                <img src={`http://localhost:3065/${img}`} />
+                                <img src={`${backUrl}/${img}`} />
                               </div>
                               <button
                                 type="button"
