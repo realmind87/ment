@@ -39,8 +39,7 @@ app.use(
     cookie: {
       secure: true,
       httpOnly: true,
-      sameSite: 'none',
-      maxAge: 60 * 60 * 24 * 1000
+      domain: process.env.NODE_ENV === 'production' && '.east-zero.com'
     },
   })
 );
