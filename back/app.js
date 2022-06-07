@@ -50,16 +50,23 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan("combined"));
   app.use(hpp());
   app.use(helmet());
+  app.use(
+    cors({
+      origin: "eastzero-blog.com",
+      credentials: true,
+    })
+  );
+
 } else {
   app.use(morgan("dev"));
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
+  
 }
-
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "ment.com", "eastzero-blog.com", "http://15.164.215.69"],
-    credentials: true,
-  })
-);
 
 app.get('/', (req, res) => {
   res.send('hello express');
