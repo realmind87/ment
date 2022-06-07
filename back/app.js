@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(
     cors({
-      origin: "http://eastzero-blog.com",
+      origin: "http://www.eastzero-blog.com/",
       credentials: true,
     })
   );
