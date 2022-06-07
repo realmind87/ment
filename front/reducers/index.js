@@ -6,7 +6,7 @@ import { librarySlice } from './slices/library';
 
 import axios from 'axios';
 //axios.defaults.baseURL = 'http://east-zero.com:3065/';
-axios.defaults.baseURL = 'https://api.eastzero-blog.com';
+axios.defaults.baseURL = 'http://api.eastzero-blog.com';
 //axios.defaults.baseURL = 'http://localhost:80/';
 axios.defaults.withCredentials = true;
 
