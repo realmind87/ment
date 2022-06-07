@@ -50,7 +50,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "ment.com", "http://192.168.0.3:3000", "http://15.164.215.69/"],
+    origin: ["http://localhost:3000", "ment.com", "http://192.168.0.3:3000", "http://15.164.215.69"],
     credentials: true,
   })
 );
