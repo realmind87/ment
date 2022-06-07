@@ -11,3 +11,4 @@ export { default as PostForm } from './post/PostForm';
 export { default as Posts } from './post/Posts';
 export { default as SearchForm } from './SearchForm';
 export { default as Portal } from './Portal';
+export { default as Loading } from './Loading';

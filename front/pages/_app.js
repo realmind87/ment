@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import { wrapper } from '../store';
 import Head from 'next/head';
 import '../styles/layout.scss';
-
-import { useDispatch } from 'react-redux';
-import { device } from '../reducers/slices/library';
+import { Loading } from '../components'
+import { useDispatch, useSelector } from 'react-redux';
+import { device, loading, librarySelector } from '../reducers/slices/library';
 
 function App({ Component, pageProps }) {
   const dispatch = useDispatch();
+  const { isLoading } = useSelector(librarySelector)
   const onResizing = () => {
     window.innerWidth >= 758 ? dispatch(device("desktop")) : dispatch(device("mobile"));
   }
@@ -17,7 +18,7 @@ function App({ Component, pageProps }) {
     window.addEventListener('resize', onResizing);
     return () => window.removeEventListener('resize', onResizing)
   }, []);
-
+  
   return (
     <>
       <Head>
@@ -27,6 +28,7 @@ function App({ Component, pageProps }) {
         <title>Ment</title>
       </Head>
       <Component {...pageProps} />
+      { isLoading && <Loading /> }
     </>
   );
 }

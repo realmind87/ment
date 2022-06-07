@@ -2,13 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../reducers/actions/auth';
 import { userSelector } from '../../reducers/slices/user';
+import { loading } from '../../reducers/slices/library';
 import { useRouter } from 'next/router';
 
 import validation from '../../hooks/validation';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { loginError, user } = useSelector(userSelector);
+  const { loginError, loginLoading, user } = useSelector(userSelector);
   const router = useRouter();
 
   const [userId, setUserId] = useState('');
@@ -64,6 +65,11 @@ const LoginForm = () => {
     dispatch(login({ userid: userId, password }));
   }, [userId, password]);
 
+  // 로그인
+  useEffect(()=>{
+    dispatch(loading(loginLoading))
+  }, [loginLoading])
+
   // 로그인 성공시
   useEffect(() => {
     if (user) {
@@ -76,7 +82,7 @@ const LoginForm = () => {
     if (loginError) {
       alert(loginError);
     }
-  }, [loginError]);
+  }, [loginError]); 
 
   return (
     <div className="membership">

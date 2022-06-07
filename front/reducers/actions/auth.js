@@ -21,6 +21,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ userid, password }, thunkAPI) => {
     try {
+      await delay(1000);
       const response = await axios.post('/user/login', { userid, password });
       return response.data;
     } catch (error) {
