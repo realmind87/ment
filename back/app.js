@@ -39,7 +39,7 @@ app.use(
     cookie: {
       secure: true,
       httpOnly: true,
-      domain: process.env.NODE_ENV === 'production' && '.east-zero.com'
+      domain: process.env.NODE_ENV === 'production' && '.eastzero-blog.com'
     },
   })
 );
@@ -56,7 +56,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "ment.com", "east-zero.com", "http://15.164.215.69"],
+    origin: ["http://localhost:3000", "ment.com", "eastzero-blog.com", "http://15.164.215.69"],
     credentials: true,
   })
 );
