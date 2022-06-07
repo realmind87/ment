@@ -30,11 +30,18 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET, { sameSite: "none", secure: true }));
+
 app.use(
   session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none',
+      maxAge: 60 * 60 * 24 * 1000
+    },
   })
 );
 app.use(passport.initialize());
