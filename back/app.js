@@ -37,7 +37,7 @@ app.use(
     resave: false,
     secret: process.env.COOKIE_SECRET,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
       domain: process.env.NODE_ENV === 'production' && '.eastzero-blog.com'
     },
