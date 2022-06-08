@@ -125,7 +125,7 @@ const PostForm = () => {
                           imagePaths.map((img, index) => (
                             <div key={index} className="img-pre-view">
                               <div className="img-area">
-                                <img src={`${backUrl}/${img}`} />
+                                <img src={`${img}`} />
                               </div>
                               <button
                                 type="button"

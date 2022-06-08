@@ -46,7 +46,7 @@ function Post() {
         detail.Images.length > 0 &&
         detail.Images.map((img, index) => (
           <div key={index} className="visual">
-            <img src={`${backUrl}/${img.src}`} />
+            <img src={`${img.src}`} />
           </div>
         ))}
       <section className="content">
