@@ -4,8 +4,8 @@ const { isLoggedIn } = require("./middlewares");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const multerS3 = require('multer-s3');
-const AWS = require('aws-sdk');
+// const multerS3 = require('multer-s3');
+// const AWS = require('aws-sdk');
 
 const router = express.Router();
 
@@ -17,11 +17,11 @@ try {
   fs.mkdirSync("uploads");
 }
 
-AWS.config.update({
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-  region: 'ap-northeast-2'
-})
+// AWS.config.update({
+//   accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//   region: 'ap-northeast-2'
+// })
 
 const upload = multer({
   storage: multer.diskStorage({
