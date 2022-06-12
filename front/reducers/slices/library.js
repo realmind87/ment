@@ -8,7 +8,6 @@ export const librarySlice = createSlice({
   },
   reducers: {
     device: (state, action) => {
-      console.log( action.payload );
       state.deviceType = action.payload;
       return state;
     },

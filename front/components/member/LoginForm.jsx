@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../reducers/actions/auth';
-import { userSelector } from '../../reducers/slices/user';
-import { loading } from '../../reducers/slices/library';
+import { login } from '@/reducers/actions/auth';
+import { userSelector } from '@/reducers/slices/user';
+import { loading } from '@/reducers/slices/library';
 import { useRouter } from 'next/router';
 
-import validation from '../../hooks/validation';
+import validation from '@/hooks/validation';
 
 const LoginForm = () => {
   const dispatch = useDispatch();

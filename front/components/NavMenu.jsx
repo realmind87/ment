@@ -27,10 +27,9 @@ const NavMenu = ({ isOpen, set }) => {
   useEffect(() => {
     if (!user) {
       onClose();
-      router.replace('/intro');
     }
   }, [user]);
-
+  
   return (
     <Portal>
       {isOpen && (

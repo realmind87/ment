@@ -23,30 +23,30 @@ AWS.config.update({
   region: 'ap-northeast-2'
 })
 
-// const upload = multer({
-//   storage: multer.diskStorage({
-//     destination(req, file, done) {
-//       done(null, "uploads");
-//     },
-//     filename(req, file, done) {
-//       const ext = path.extname(file.originalname);
-//       const basename = path.basename(file.originalname, ext);
-//       done(null, basename + "_" + new Date().getTime() + ext);
-//     },
-//   }),
-//   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-// });
-
 const upload = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: 'eastzero-blog-s3',
-    key(req, file, cb) {
-      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads");
     },
-    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-  })
-})
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + "_" + new Date().getTime() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+});
+
+// const upload = multer({
+//   storage: multerS3({
+//     s3: new AWS.S3(),
+//     bucket: 'eastzero-blog-s3',
+//     key(req, file, cb) {
+//       cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+//     },
+//     limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+//   })
+// })
 
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
@@ -85,7 +85,7 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
         },
         {
           model: User, // 게시글 작성자
-          attributes: ["id", "userid"],
+          attributes: ["id", "userid", 'nickname'],
         },
       ],
     });
@@ -97,14 +97,14 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   }
 });
 
-router.get("/detail", isLoggedIn, async (req, res, next) => {
+router.get("/detail", async (req, res, next) => {
   try {
     const post = await Post.findOne({
       where: parseInt(req.query.postId),
       include: [
         {
           model: User,
-          attributes: ["id", "userid"],
+          attributes: ["id", "userid", 'nickname'],
         },
         {
           model: Comment,
@@ -127,7 +127,7 @@ router.get("/detail", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.get("/comment", isLoggedIn, async (req, res, next) => {
+router.get("/comment", async (req, res, next) => {
   try {
     const comment = await Comment.findAll({
       where: {
@@ -196,7 +196,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 
 router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
   console.log(req.files);
-  res.json(req.files.map((v) => v.location));
+  res.json(req.files.map((v) => v.filename));
 });
 
 module.exports = router;

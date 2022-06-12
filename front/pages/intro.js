@@ -58,16 +58,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Cookie = cookie;
     }
 
-    const { user } = store.getState().user;
+    // const { user } = store.getState().user;
 
-    if (user) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        },
-      };
-    }
+    // if (user) {
+    //   return {
+    //     redirect: {
+    //       destination: '/',
+    //       permanent: false,
+    //     },
+    //   };
+    // }
 
     return {
       props: {},

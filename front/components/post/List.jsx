@@ -10,17 +10,17 @@ const List = ({ id, title, content, images }) => {
       pathname: `/post/${id}`,
     });
   }, []);
-
+  
   return (
     <div className="post-box" onClick={() => onRouterDetail(id)}>
       {images && images.length > 0 && (
         <div className="post-box__thumb">
-          <img src={`${images[0].src}`} />
+          <img src={`${backUrl}/${images[0].src}`} />
         </div>
       )}
       <div className="post-box__area">
         <strong className="tit">{title}</strong>
-        <p className="txt-info">{content}</p>
+        <p className="txt-info">{content.replace(/(<([^>]+)>)/ig,"")}</p>
       </div>
     </div>
   );

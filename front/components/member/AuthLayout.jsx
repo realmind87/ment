@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Portal } from '../../components';
+import { Portal } from '@/components/index';
 
 const AuthLayout = ({ title, show, setShow, children }) => {
   const onClose = useCallback(() => setShow(false), []);

@@ -1,29 +1,34 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, login } from '../../reducers/actions/auth';
-import { userSelector } from '../../reducers/slices/user';
-import { loading } from '../../reducers/slices/library';
+import { register, login, uploadImages, imageRemove } from '@/reducers/actions/auth';
+import { userSelector } from '@/reducers/slices/user';
+import { loading } from '@/reducers/slices/library';
 import { useRouter } from 'next/router';
+import backUrl from '../../config'
 
-import validation from '../../hooks/validation';
+import validation from '@/hooks/validation';
 
 const SiginupForm = () => {
   const dispatch = useDispatch();
-  const {signupLoading, signupDone, signupError, loginLoading, user } = useSelector(userSelector);
+  const {signupLoading, signupDone, signupError, loginLoading, user, imagePaths } = useSelector(userSelector);
   const router = useRouter();
 
   const [step, setStep] = useState('user');
+  const [stepIndex, setStepIndex] = useState(1);
   const [userId, setUserId] = useState('');
+  const [nickname, setNickname] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
 
   const [errUserId, setErrUserId] = useState(false);
+  const [errNickname, setErrNickname] = useState(false);
   const [errEmail, setErrEmail] = useState(false);
   const [errPassword, setErrPassword] = useState(false);
   const [errPasswordCheck, setErrPasswordCheck] = useState(false);
 
   const [errUserMsg, setErrUserMsg] = useState('아이디');
+  const [errNicknameMsg, setErrNicknameMsg] = useState('닉네임');
   const [errEmailMsg, setErrEmailMsg] = useState('이메일');
   const [errPasswordMsg, setErrPasswordMsg] = useState('비밀번호');
   const [errPasswordCheckMsg, setErrPasswordCheckMsg] =
@@ -34,6 +39,13 @@ const SiginupForm = () => {
     setErrUserId(false);
     if (target.value <= 0) setErrUserMsg('아이디');
     setUserId(target.value);
+  }, []);
+
+  // 닉네임 입력
+  const onChangeNickname = useCallback(({ target }) => {
+    setErrNickname(false);
+    if (target.value <= 0) setErrNicknameMsg('닉네임');
+    setNickname(target.value);
   }, []);
 
   // 이메일 입력
@@ -60,6 +72,8 @@ const SiginupForm = () => {
   // 기본 유효성 검사
   const onUserValidation = useCallback((userId, userEmail) => {
     const userIdRegExp = /^[a-zA-Z0-9]{6,12}$/;
+    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
     if (
       validation(
         userId.length <= 0,
@@ -70,6 +84,7 @@ const SiginupForm = () => {
       )
     )
       return false;
+    
     if (
       validation(
         !userIdRegExp.test(userId),
@@ -80,6 +95,18 @@ const SiginupForm = () => {
       )
     )
       return false;
+
+      if (
+        validation(
+          !regEmail.test(userEmail),
+          setUserEmail,
+          setErrEmail,
+          setErrEmailMsg,
+          '올바른 이메일을 입력해주세요.',
+        )
+      )
+        return false;
+
     if (
       validation(
         userEmail.length <= 0,
@@ -143,20 +170,86 @@ const SiginupForm = () => {
     return true;
   }, []);
 
+  // 프로필 유효성 검사
+  const onProfileValidation = useCallback((nickname)=>{
+    console.log(nickname.length)
+    if (
+      validation(
+        nickname.length <= 0,
+        setNickname,
+        setErrNickname,
+        setErrNicknameMsg,
+        '닉네임을 입력해 주세요',
+      )
+    )
+      return false;
+
+    return true;
+  }, [])
+
   // 다음 버튼
   const onNext = useCallback(() => {
-    if (!onUserValidation(userId, userEmail)) return true;
-    setStep('password');
-  }, [userId, userEmail]);
+
+    if (step === "user") {
+      if (!onUserValidation(userId, userEmail)) return true;
+      setStep('password');
+    }
+
+    if (step === "password") {
+      if (!onPasswordValidation(password, passwordCheck)) return true;
+      setStep('profile'); 
+    }
+
+    setStepIndex(prevState => prevState + 1);
+    
+  }, [userId, password, passwordCheck, userEmail]);
+
+  const onImageChange = useCallback((e) => {
+    e.preventDefault();
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+
+    dispatch(uploadImages(imageFormData));
+  }, []);
+
+  const onImageRemove = useCallback(
+    (index) => dispatch(imageRemove(index)),
+    [],
+  );
 
   // 회원 가입 버튼
-  const onSignup = useCallback(() => {
-    if (!onPasswordValidation(password, passwordCheck)) return true;
+  const onSignup = useCallback((e) => {
+    e.preventDefault();
+    if (!onProfileValidation(nickname)) return true;
+
     const userid = userId;
     const email = userEmail;
-    dispatch(register({ userid, email, password }));
 
-  }, [userId, userEmail, password, passwordCheck]);
+    const formData = new FormData();
+    imagePaths.forEach((img) => {
+      formData.append('image', img);
+    });
+    formData.append('userid', userId);
+    formData.append('nickname', nickname);
+    formData.append('email', email);
+    formData.append('password', password);
+
+    // FormData의 key 확인
+    for (let key of formData.keys()) {
+      console.log(`key: ${key}`);
+    }
+
+    // FormData의 value 확인
+    for (let value of formData.values()) {
+      console.log(`value: ${value}`);
+    }
+
+    //dispatch(register({ userid, nickname, email, password }));
+    dispatch(register(formData));
+
+  }, [userId, userEmail, password, nickname]);
 
   // 회원가입 성공시
   useEffect(() => {
@@ -174,6 +267,7 @@ const SiginupForm = () => {
   }, [loginLoading])
 
   useEffect(() => {
+    console.log(user);
     if (user) {
       router.replace('/');
     }
@@ -188,7 +282,8 @@ const SiginupForm = () => {
 
   return (
     <div className="membership">
-      <form>
+      <p className='sign-step'>3단계 중 {stepIndex}단계</p>
+      <form encType="multipart/form-data" onSubmit={onSignup}>
         {step === 'user' && (
           <>
             <div className="input-control">
@@ -200,6 +295,7 @@ const SiginupForm = () => {
                 onChange={onChangeUserId}
               />
             </div>
+
             <div className="input-control">
               <input
                 type="email"
@@ -209,6 +305,7 @@ const SiginupForm = () => {
                 onChange={onChangeUserEmail}
               />
             </div>
+
             <div className="btn-area">
               <button type="button" className="btn" onClick={onNext}>
                 다음
@@ -237,7 +334,65 @@ const SiginupForm = () => {
               />
             </div>
             <div className="btn-area">
-              <button type="button" className="btn" onClick={onSignup}>
+              <button type="button" className="btn" onClick={onNext}>
+                다음
+              </button>
+            </div>
+          </>
+        )}
+        {step === 'profile' && (
+          <>
+            <div className='profile-img'>
+              <div className="img-wrap">
+                <div className="img-content">
+                  {imagePaths &&
+                    imagePaths.map((img, index) => (
+                      <div key={index} className="img-pre-view">
+                        <div className="img-area">
+                          <img src={`${backUrl}/${img}`} />
+                        </div>
+                        <button
+                          type="button"
+                          className="btn-del"
+                          onClick={() => onImageRemove(index)}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    ))}
+
+                  {imagePaths && imagePaths.length === 0 && (
+                    <>
+                      <label
+                        className="img-area"
+                        htmlFor="img-input"
+                      ></label>
+                      <input
+                        accept="image/*"
+                        type="file"
+                        id="img-input"
+                        name="image"
+                        multiple
+                        onChange={onImageChange}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="input-control">
+              <input
+                type="text"
+                className={errNickname ? 'err' : ''}
+                placeholder={errNicknameMsg}
+                value={nickname}
+                onChange={onChangeNickname}
+              />
+            </div>
+            
+            <div className="btn-area">
+              <button type="submit" className="btn">
                 등록
               </button>
             </div>

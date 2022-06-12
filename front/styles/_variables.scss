@@ -1,4 +1,6 @@
-$notosans: 'Roboto', 'NotoSansKR', Arial, AppleGothic, verdana, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700&display=swap');
+
+$notosans: 'Roboto', 'Noto Sans KR', Arial, AppleGothic, verdana, sans-serif;
 $path-img: '/images/';
 $path-img-common: $path-img + 'common/';
 $path-img-ico: $path-img + 'ico/';
@@ -9,6 +11,8 @@ $main-color: #CC0100;
 $font-bold: 700;
 $font-medium: 500;
 $font-regular: 400;
+$font-light: 300;
+$font-thin: 100;
 
 /* 미디어쿼리 */
 $breakpoint-mobile: 360px;

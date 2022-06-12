@@ -59,16 +59,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     await store.dispatch(userInfo());
     await store.dispatch(loadComment(context.params.id));
 
-    const { user } = store.getState().user;
+    // const { user } = store.getState().user;
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: '/intro',
-          permanent: false,
-        },
-      };
-    }
+    // if (!user) {
+    //   return {
+    //     redirect: {
+    //       destination: '/intro',
+    //       permanent: false,
+    //     },
+    //   };
+    // }
 
     return {
       props: {},

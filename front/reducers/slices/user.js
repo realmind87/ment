@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, loginout, register, userInfo } from '../actions/auth';
+import { login, loginout, register, userInfo, uploadImages, imageRemove } from '../actions/auth';
 
 export const userSlice = createSlice({
   name: 'user',
@@ -16,13 +16,21 @@ export const userSlice = createSlice({
     logoutDone: false,
     logoutError: null,
 
+    imagesLoading: false,
+    imagesDone: false,
+    imagesError: null,
+
+    removeImageLoading: false,
+    removeImageDone: false,
+    removeImageError: null,
+
     signupLoading: false,
     signupDone: false,
     signupError: null,
     isLogin: false,
 
     initState: true,
-
+    imagePaths: [],
     user: null,
   },
   reducers: {
@@ -95,6 +103,38 @@ export const userSlice = createSlice({
         state.logoutLoading = false;
         state.logoutDone = false;
         state.logoutError = action.payload;
+      })
+      .addCase(uploadImages.pending, (state, action) => {
+        state.imagesLoading = true;
+        state.imagesDone = false;
+        state.imagesError = null;
+      })
+      .addCase(uploadImages.fulfilled, (state, action) => {
+        state.imagesLoading = false;
+        state.imagesDone = true;
+        state.imagePaths = action.payload.data;
+      })
+      .addCase(uploadImages.rejected, (state, action) => {
+        state.imagesLoading = false;
+        state.imagesDone = false;
+        state.imagesError = action.payload;
+      })
+      .addCase(imageRemove.pending, (state, action) => {
+        state.removeImageLoading = true;
+        state.removeImageDone = false;
+        state.removeImageError = null;
+      })
+      .addCase(imageRemove.fulfilled, (state, action) => {
+        state.removeImageLoading = false;
+        state.removeImageDone = true;
+        state.imagePaths = state.imagePaths.filter(
+          (img, index) => index !== action.payload,
+        );
+      })
+      .addCase(imageRemove.rejected, (state, action) => {
+        state.removeImageLoading = false;
+        state.removeImageDone = false;
+        state.removeImageError = action.payload;
       })
       .addCase(register.pending, (state, action) => {
         state.signupLoading = true;

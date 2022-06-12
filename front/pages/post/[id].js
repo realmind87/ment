@@ -1,25 +1,26 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import Link from 'next/link';
 import { wrapper } from '../../store';
-import { postsSelector } from '../../reducers/slices/post';
-import { DetailLayout } from '../../components';
-import { loadDetail } from '../../reducers/actions/post';
-import { userInfo } from '../../reducers/actions/auth';
-import { librarySelector } from '../../reducers/slices/library';
-import { userSelector } from '../../reducers/slices/user';
-import { removePost } from '../../reducers/actions/post';
+import { postsSelector } from '@/reducers/slices/post';
+import { DetailLayout } from '@/components/index';
+import { loadDetail } from '@/reducers/actions/post';
+import { userInfo } from '@/reducers/actions/auth';
+import { userSelector } from '@/reducers/slices/user';
+import { removePost } from '@/reducers/actions/post';
+import CommendForm from '@/components/layouts/CommendForm'
+import useApp from '@/hooks/useApp'
 import backUrl from '../../config'
 
 function Post() {
   const router = useRouter();
   const { detail, detailloading } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
-  const { deviceType } = useSelector(librarySelector);
   const currentUserId = user?.id;
-  
+
+  const app = useApp();
+
   const onRemovePost = useCallback(() =>  dispatch(removePost(detail.id)), []);
 
   const onCommendRouter = useCallback((id) => {
@@ -27,44 +28,91 @@ function Post() {
       pathname: `/comment/${id}`,
     });
   }, []);
-
+  
   if (detailloading) return <SkeletonDetail />;
   if (!detail) return null;
-  
-  console.log( deviceType );
-
+    
   return (
     <DetailLayout
       detail={detail}
-      title={detail.title}
       postId={detail.id}
       userId={detail.UserId}
-      deviceType={deviceType}
       onRemovePost={onRemovePost}
     >
-      {detail.Images &&
+      {/* {detail.Images &&
         detail.Images.length > 0 &&
         detail.Images.map((img, index) => (
           <div key={index} className="visual">
-            <img src={`${img.src}`} />
+            <img src={`${backUrl}/${img.src}`} />
           </div>
-        ))}
+      ))} */}
+
       <section className="content">
-        <p>{detail.content}</p>
+        <div className='content__header'>
+          <h1>{detail.title}</h1>
+          <div className='post-info'>
+            <p className='txt-nickname'>{detail.User.nickname}</p>
+            <span className='txt-date'>{(()=>{
+              const date = new Date(detail.updatedAt);
+              const year = date.getFullYear();
+              const month = date.getMonth();
+              const day = date.getDay();
+              return `${year}년 ${month}월 ${day}일`
+            })()}</span>
+          </div>
+        </div>
+        <div className='content__area' dangerouslySetInnerHTML={{__html: detail.content}}></div>
       </section>
-      <div className="commend-area" onClick={() => onCommendRouter(detail.id)}>
-        <div className="commend-area__info">
-          <strong>댓글</strong>
-          <span>{detail.Comments.length}</span>
-        </div>
-        <div className="commend-area__content">
-          {detail.Comments.length !== 0 ? (
-            <p>{detail.Comments[0].content}</p>
-          ) : (
-            <p>작성된 댓글이 없습니다.</p>
-          )}
-        </div>
-      </div>
+        
+      {
+        app.device &&
+          app.device === "mobile"
+            ? (
+              <div className="commend-area" onClick={() => onCommendRouter(detail.id)}>
+                <div className="commend-area__info">
+                  <strong>댓글</strong>
+                  <span>{detail.Comments.length}</span>
+                </div>
+                <div className="commend-area__content">
+                  {detail.Comments.length !== 0 ? (
+                    <p>{detail.Comments[0].content}</p>
+                  ) : (
+                    <p>작성된 댓글이 없습니다.</p>
+                  )}
+                </div>
+              </div>
+
+            ) : (
+              <div className="commend-area">
+                <div className="commend-area__info">
+                  <strong>댓글</strong>
+                  <span>{detail.Comments.length}</span>
+                </div>
+                <div className="commend-area__content">
+                  {detail.Comments.length !== 0 
+                    ? (
+                      <ul className='list'>
+                        {detail.Comments.map((item, index) => 
+                          <li key={index}>
+                              <div className="user-info">
+                                  <div className="user-thum" />
+                                  <span>{item.User.userid}</span>
+                              </div>
+                              <p className="txt">{item.content}</p>
+                          </li>
+                        )}
+                      </ul>
+                    ) : (
+                      <p>작성된 댓글이 없습니다.</p>
+                    )
+                  }
+                </div>
+                
+                {user && <CommendForm id={detail.id} />}
+
+              </div>
+            )
+      }
     </DetailLayout>
   );
 }
@@ -102,16 +150,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     await store.dispatch(userInfo());
     await store.dispatch(loadDetail(context.params.id));
 
-    const { user } = store.getState().user;
+    // const { user } = store.getState().user;
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: '/intro',
-          permanent: false,
-        },
-      };
-    }
+    // if (!user) {
+    //   return {
+    //     redirect: {
+    //       destination: '/intro',
+    //       permanent: false,
+    //     },
+    //   };
+    // }
 
     return {
       props: {},

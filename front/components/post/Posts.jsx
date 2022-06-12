@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { postsSelector, clearPostState } from '../../reducers/slices/post';
-import { loadPost, initPost } from '../../reducers/actions/post';
+import { postsSelector, clearPostState } from '@/reducers/slices/post';
+import { loadPost, initPost } from '@/reducers/actions/post';
 import { useRouter } from 'next/router';
 
 import List from './List';
@@ -49,7 +49,7 @@ const Posts = () => {
   }, [hasMorePosts, loadLoading, mainPosts]);
 
   if (initPostLoading) return skeletonList(10);
-  if (initPostError) router.push('/intro');
+  //if (initPostError) router.push('/intro');
   if (!mainPosts) return null;
 
   return (

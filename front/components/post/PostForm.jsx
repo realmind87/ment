@@ -1,20 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Modal from '../Modal';
-import validation from '../../hooks/validation';
+import Editor from './Editor';
+import validation from '@/hooks/validation';
 import { useDispatch, useSelector } from 'react-redux';
-import { postsSelector } from '../../reducers/slices/post';
-import { closePostState } from '../../reducers/slices/post';
-import {
-  addPost,
-  uploadImages,
-  imageRemove,
-} from '../../reducers/actions/post';
+import { postsSelector } from '@/reducers/slices/post';
+import { closePostState } from '@/reducers/slices/post';
+import { addPost, uploadImages, imageRemove } from '@/reducers/actions/post';
 import backUrl from '../../config'
 
 const PostForm = () => {
   const dispatch = useDispatch();
   const { imagePaths, openPostFrom } = useSelector(postsSelector);
-  const [img, setImg] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -24,9 +20,10 @@ const PostForm = () => {
   const [errTitleMsg, setErrTitleMsg] = useState('제목');
   const [errContentMsg, setErrContentMsg] = useState('내용');
 
+  const editor = useRef(null);
+
   const onClose = useCallback(() => {
     document.querySelector('#body').classList.remove('hidden');
-    setImg(null);
     setTitle('');
     setContent('');
     setErrTitle(false);
@@ -47,16 +44,16 @@ const PostForm = () => {
       )
     )
       return false;
-    if (
-      validation(
-        content.length <= 0,
-        setContent,
-        setErrContent,
-        setErrContentMsg,
-        '내용을 입력해 주세요.',
-      )
-    )
-      return false;
+    // if (
+    //   validation(
+    //     content.length <= 0,
+    //     setContent,
+    //     setErrContent,
+    //     setErrContentMsg,
+    //     '내용을 입력해 주세요.',
+    //   )
+    // )
+    //   return false;
     return true;
   }, []);
 
@@ -70,10 +67,7 @@ const PostForm = () => {
     dispatch(uploadImages(imageFormData));
   }, []);
 
-  const onImageRemove = useCallback(
-    (index) => dispatch(imageRemove(index)),
-    [],
-  );
+  const onImageRemove = useCallback((index) => dispatch(imageRemove(index)), []);
 
   const onChangeTitle = useCallback(({ target }) => {
     setErrTitle(false);
@@ -81,26 +75,26 @@ const PostForm = () => {
     setTitle(target.value);
   }, []);
 
-  const onChangeContent = useCallback(({ target }) => {
-    setErrContent(false);
-    if (target.value <= 0) setErrContentMsg('내용');
-    setContent(target.value);
-  }, []);
+  // const onChangeContent = useCallback(({ target }) => {
+  //   setErrContent(false);
+  //   if (target.value <= 0) setErrContentMsg('내용');
+  //   setContent(target.value);
+  // }, []);
 
   const onAddPost = useCallback(
     (e) => {
       e.preventDefault();
-      if (!onValidation(title, content)) return true;
+      if (!onValidation(title)) return true;
       const formData = new FormData();
       imagePaths.forEach((img) => {
         formData.append('image', img);
       });
       formData.append('title', title);
-      formData.append('content', content);
+      formData.append('content', editor.current.innerHTML);
 
       dispatch(addPost(formData));
       dispatch(closePostState())
-      setImg(null);
+      
       setTitle('');
       setContent('');
       document.querySelector('#body').classList.remove('hidden');
@@ -117,7 +111,7 @@ const PostForm = () => {
             <div className="modal-wrap__content">
               <form encType="multipart/form-data" onSubmit={onAddPost}>
                 <ul>
-                  <li>
+                  {/* <li>
                     <span className="tit-label">이미지</span>
                     <div className="img-wrap">
                       <div className="img-content">
@@ -125,7 +119,7 @@ const PostForm = () => {
                           imagePaths.map((img, index) => (
                             <div key={index} className="img-pre-view">
                               <div className="img-area">
-                                <img src={`${img}`} />
+                                <img src={`${backUrl}/${img}`} />
                               </div>
                               <button
                                 type="button"
@@ -155,7 +149,7 @@ const PostForm = () => {
                         )}
                       </div>
                     </div>
-                  </li>
+                  </li> */}
                   <li>
                     <label className="tit-label" htmlFor="tit-input">
                       제목
@@ -171,7 +165,7 @@ const PostForm = () => {
                       />
                     </div>
                   </li>
-                  <li>
+                  {/* <li>
                     <label className="tit-label" htmlFor="textarea">
                       내용
                     </label>
@@ -184,7 +178,19 @@ const PostForm = () => {
                         onChange={onChangeContent}
                       />
                     </div>
+                  </li> */}
+
+                  <li>
+                    <label className="tit-label" htmlFor="textarea">
+                      내용
+                    </label>
+                    {/* <div className='editor-form'>
+                      <div className='textarea' contentEditable='true'></div>
+                    </div> */}
+                    <Editor ref={editor} />
+                    
                   </li>
+
                 </ul>
                 <div className="btn-area">
                   <button type="submit" className="btn">

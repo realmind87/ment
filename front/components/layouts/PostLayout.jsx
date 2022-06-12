@@ -1,17 +1,16 @@
 import Header from '../Header';
 import Footer from '../Footer';
 import PostForm from '../post/PostForm';
-import { useSelector } from 'react-redux';
-import { librarySelector } from '../../reducers/slices/library';
+import useApp from "@/hooks/useApp"
 
 const PostLayout = ({ children }) => {
-  const { deviceType } = useSelector(librarySelector);
+  const app = useApp();
   
   return (
     <div className="wrap">
       <Header to="main" />
       <section className="post-content">{children}</section>
-      {/* { deviceType === "mobile" && <Footer /> } */}
+      {/* { app.device === "mobile" && <Footer /> } */}
       <PostForm />
     </div>
   );

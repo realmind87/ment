@@ -42,7 +42,7 @@ const Detail = () => {
           </div>
         ))}
       <section className="content">
-        <p>{detail.content}</p>
+        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(detail.content)}}></div>
       </section>
       <div className="commend-area" onClick={() => onCommendRouter(detail.id)}>
         <div className="commend-area__info">

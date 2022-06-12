@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { userSelector } from '../../reducers/slices/user';
-import { postsSelector, clearPostRemove } from '../../reducers/slices/post';
-import { removePost } from '../../reducers/actions/post';
+import { userSelector } from '@/reducers/slices/user';
+import { postsSelector, clearPostRemove } from '@/reducers/slices/post';
+import { removePost } from '@/reducers/actions/post';
 
-function DetailLayout({ children, detail, title, userId}) {
+function DetailLayout({ children, detail, userId}) {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user } = useSelector(userSelector);
@@ -58,16 +58,7 @@ function DetailLayout({ children, detail, title, userId}) {
             </button>
           </Link>
 
-          {!title ? (
-            <strong
-              className="skeleton__tit"
-              style={{ width: '5rem', height: '1.6rem' }}
-            >
-              {title}
-            </strong>
-          ) : (
-            <strong>{title}</strong>
-          )}
+          <strong>목록으로</strong>
 
           {userId === currentUserId && (
             <button type="button" className="btn" onClick={onRemovePost}>

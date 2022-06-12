@@ -42,15 +42,36 @@ export const loginout = createAsyncThunk(
   },
 );
 
+export const uploadImages = createAsyncThunk(
+  'auth/uploadImages',
+  async (data, thunkAPI) => {
+    console.log(data);
+    try {
+      const response = await axios.post('/user/images', data);
+      console.log(response);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const imageRemove = createAsyncThunk(
+  'auth/imageRemove',
+  async (data, thunkAPI) => {
+    try {
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const register = createAsyncThunk(
   'auth/register',
-  async ({ userid, email, password }, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.post('/user', {
-        userid,
-        email,
-        password,
-      });
+      const response = await axios.post('/user', data);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

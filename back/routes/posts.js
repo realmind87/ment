@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const { Post, Image, User, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
-router.get("/", isLoggedIn, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const where = {};
     if (parseInt(req.query.lastId, 10)) {

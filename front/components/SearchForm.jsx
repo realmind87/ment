@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { librarySelector } from '../reducers/slices/library';
+import { librarySelector } from '@/reducers/slices/library';
 
 const SearchForm = ({ set, device }) => {
   // state
@@ -18,8 +18,7 @@ const SearchForm = ({ set, device }) => {
   }, []);
 
   const onBack = useCallback(() => set(null), []);
-
-
+  
   return (
     <form onSubmit={onSubmitSearch}>
       <div className="search-area">
