@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
+const { or, and, like } = Op;
 const { Post, Image, User, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
@@ -29,6 +30,29 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(error);
+  }
+});
+
+// 검색
+router.get("/search", async (req, res, next) => {
+  try {
+      const keyword = req.query.keyword;
+      const searchDiary = await Post.findAll({
+        where: {
+          [or]: [
+            { title: {[like]: `%${keyword}%`}}, 
+            { content: {[like]: `%${keyword}%`}}
+          ]
+        },
+        include: [{
+          model: Image,
+        }],
+      })
+      if (searchDiary.length === 0) return res.status(401).json({message: '검색과 일치하는 내용의 일기가 없습니다.'})
+      res.status(200).json(searchDiary);
+  } catch (error) {
+      console.error(error);
+      next(error);
   }
 });
 

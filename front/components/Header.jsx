@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
-//import SearchForm from './SearchForm';
+import SearchForm from './SearchForm';
 import NavMenu from './NavMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { openPostState } from '@/reducers/slices/post';
 import { userSelector } from '@/reducers/slices/user';
+import useApp from '@/hooks/useApp';
 import Link from 'next/link'
 
 import backUrl from '../config'
@@ -12,6 +13,7 @@ const Header = ({ to = 'main' }) => {
   const dispatch = useDispatch();
   const [isOpen, setOpen] = useState();
   const { user } = useSelector(userSelector);
+  const app = useApp();
 
   const imagePaths = user?.Images;
 
@@ -31,18 +33,16 @@ const Header = ({ to = 'main' }) => {
         <h1 className="logo">ment</h1>
         {to === 'main' && (
           <div className='tnb'>
-            {/* {deviceType === "desktop" && 
-              <>
-                  <div className="main-search">
-                    <SearchForm />
-                  </div>
-              </>
-            } */}
+            {app.device === "desktop" &&
+              <div className="main-search">
+                <SearchForm />
+              </div>
+            }
 
             {user 
               ? (
                 <>
-                <button type="button" className="btn__add" onClick={onOpenPost}>등록</button>
+                  {app.device === "desktop" && <button type="button" className="btn__add" onClick={onOpenPost}>등록</button> }
                   {imagePaths &&
                     imagePaths.length > 0 
                       ? (
@@ -56,8 +56,7 @@ const Header = ({ to = 'main' }) => {
                       )
                   }
                 </>
-              )
-              : (
+              ) : (
                 <Link href="/intro">
                   <a className="btn-login">로그인</a>
                 </Link>

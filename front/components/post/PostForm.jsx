@@ -81,8 +81,7 @@ const PostForm = () => {
   //   setContent(target.value);
   // }, []);
 
-  const onAddPost = useCallback(
-    (e) => {
+  const onAddPost = useCallback((e) => {
       e.preventDefault();
       if (!onValidation(title)) return true;
       const formData = new FormData();
@@ -99,8 +98,7 @@ const PostForm = () => {
       setContent('');
       document.querySelector('#body').classList.remove('hidden');
     },
-    [imagePaths, title, content],
-  );
+    [imagePaths, title, content]);
 
   return (
     <Modal>
@@ -181,9 +179,7 @@ const PostForm = () => {
                   </li> */}
 
                   <li>
-                    <label className="tit-label" htmlFor="textarea">
-                      내용
-                    </label>
+                    <label className="tit-label" htmlFor="textarea">내용</label>
                     {/* <div className='editor-form'>
                       <div className='textarea' contentEditable='true'></div>
                     </div> */}

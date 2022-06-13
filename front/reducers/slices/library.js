@@ -5,6 +5,7 @@ export const librarySlice = createSlice({
   initialState: {
     deviceType: null,
     isLoading: false,
+    keyword: null
   },
   reducers: {
     device: (state, action) => {
@@ -14,9 +15,13 @@ export const librarySlice = createSlice({
     loading: (state, action) => {
       state.isLoading = action.payload;
       return state;
-    }
+    },
+    getKeyword: (state, action) => {
+      state.keyword = action.payload;
+      return state;
+    },
   }
 });
 
-export const { device, loading } = librarySlice.actions;
+export const { device, loading, getKeyword } = librarySlice.actions;
 export const librarySelector = (state) => state.library;

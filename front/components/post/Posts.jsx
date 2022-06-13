@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postsSelector, clearPostState } from '@/reducers/slices/post';
-import { loadPost, initPost } from '@/reducers/actions/post';
+import { librarySelector } from '@/reducers/slices/library';
+import { loadPost, search, initPost } from '@/reducers/actions/post';
 import { useRouter } from 'next/router';
 
 import List from './List';
 import SkeletonList from './SkeletonList';
+import { useCallback } from 'react';
 
 const skeletonList = (number) => {
   const _result = [];
@@ -24,7 +26,9 @@ const Posts = () => {
     addloading,
     initPostError,
     initPostLoading,
+    searchError,
   } = useSelector(postsSelector);
+  const { keyword } = useSelector(librarySelector)
 
   const router = useRouter();
 
@@ -49,7 +53,7 @@ const Posts = () => {
   }, [hasMorePosts, loadLoading, mainPosts]);
 
   if (initPostLoading) return skeletonList(10);
-  //if (initPostError) router.push('/intro');
+  if (searchError) return <SearchDataNone keyword={keyword}  hasMorePosts={hasMorePosts} loadLoading={loadLoading} mainPosts={mainPosts} />;
   if (!mainPosts) return null;
 
   return (
@@ -68,5 +72,21 @@ const Posts = () => {
     </>
   );
 };
+
+const SearchDataNone = ({keyword}) => {
+  const dispatch = useDispatch();
+
+  const reload = useCallback(()=>{
+    dispatch(search(""));
+  }, [])
+
+  return (
+    <div className='dataNone'>
+      <strong>"{keyword}" 관련된</strong>
+      <strong>검색결과가 없습니다.</strong>
+      <button type="button" className='btn' onClick={reload}>다시 불러오기</button>
+    </div>
+  )
+}
 
 export default Posts;

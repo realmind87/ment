@@ -20,7 +20,7 @@ const List = ({ id, title, content, images }) => {
       )}
       <div className="post-box__area">
         <strong className="tit">{title}</strong>
-        <p className="txt-info">{content.replace(/(<([^>]+)>)/ig,"")}</p>
+        <p className="txt-info">{content.replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/ig,"")}</p>
       </div>
     </div>
   );

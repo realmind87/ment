@@ -13,6 +13,25 @@ body {
 #portal {
 }
 
+.dataNone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 15rem;
+  width: 100%;
+  
+  & > strong {
+    display: block;
+    margin-top: 1rem;
+    font-size: 1.6rem;
+  }
+
+  .btn {
+    margin-top: 1.5rem;
+  }
+}
+
 // loading
 .loading-wrap {
   position: fixed;
@@ -91,6 +110,7 @@ body {
 
     .btn-login {
       display: block;
+      width: 5rem;
       margin-left: .5rem;
       font-size: 1.3rem;
       color: #333;
@@ -220,6 +240,39 @@ body {
       &.underline {
         text-decoration: underline;
       }
+
+      &.icon {
+        text-indent: -9999px;
+        
+        &.justifyLeft {
+          background-image: url($path-img-ico + 'ico-align-left.svg');
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+          background-size: 2rem;
+        }
+
+        &.justifyCenter {
+          background-image: url($path-img-ico + 'ico-align-center.svg');
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+          background-size: 2rem;
+        }
+
+        &.justifyRight {
+          background-image: url($path-img-ico + 'ico-align-right.svg');
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+          background-size: 2rem;
+        }
+
+        &.link {
+          background-image: url($path-img-ico + 'ico-link.svg');
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+          background-size: 2rem;
+        }
+        
+      }
     }
 
     .img-area {
@@ -253,6 +306,17 @@ body {
 
       img {
         max-width: 100%;
+      }
+
+      & .code {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 4rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: #000;
+        color: #fff;
       }
   
       &.err {
@@ -313,10 +377,19 @@ body {
   width: 12rem;
   height: 4.5rem;
   border-radius: 50px;
-  background-color: #c9c9c9;
   font-size: 1.4rem;
   color: #fff;
   background-color: $main-color;
+
+  &__gray {
+    display: block;
+    width: 12rem;
+    height: 4.5rem;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    color: #fff;
+    background-color: #c9c9c9;
+  }
 
   &__add {
     width: 3rem;
@@ -366,6 +439,15 @@ body {
     width: 100%;
     height: 5rem;
     border-radius: 0.5rem;
+    cursor: pointer;
+
+    &__gray {
+      margin-top: 3rem;
+      width: 100%;
+      height: 5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
   }
 }
 
@@ -423,6 +505,14 @@ body {
     .sign-step {
       font-size: 1.4rem;
       margin-bottom: 1.5rem;
+    }
+
+    .btn-area {
+      display: flex;
+      align-items: center;
+      button + button {
+        margin-left: 1rem;
+      }
     }
   }
 
@@ -498,7 +588,7 @@ body {
 
 /* post */
 .post-content {
-  padding-top: 4rem;
+  padding-top: 5rem;
   padding-bottom: 5rem;
 
   .post-box {
@@ -786,6 +876,11 @@ body {
 
       img {
         max-width: 100%;
+      }
+
+      a {
+        color: blue;
+        text-decoration: underline;
       }
     }
   }

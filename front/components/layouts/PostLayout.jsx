@@ -10,7 +10,7 @@ const PostLayout = ({ children }) => {
     <div className="wrap">
       <Header to="main" />
       <section className="post-content">{children}</section>
-      {/* { app.device === "mobile" && <Footer /> } */}
+      { app.device === "mobile" && <Footer /> }
       <PostForm />
     </div>
   );

@@ -71,6 +71,7 @@ const SiginupForm = () => {
 
   // 기본 유효성 검사
   const onUserValidation = useCallback((userId, userEmail) => {
+
     const userIdRegExp = /^[a-zA-Z0-9]{6,12}$/;
     const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
@@ -187,22 +188,32 @@ const SiginupForm = () => {
     return true;
   }, [])
 
+  // 이전 버튼
+  const onPrev = useCallback(() => {
+    if (step === "password") setStep('user')
+    if (step === "profile") setStep('password'); 
+
+    setStepIndex(prevState => prevState + -1);
+    
+  }, [userId, password, passwordCheck, userEmail, step]);
+
   // 다음 버튼
   const onNext = useCallback(() => {
-
     if (step === "user") {
       if (!onUserValidation(userId, userEmail)) return true;
+      console.log('user');
       setStep('password');
     }
 
     if (step === "password") {
       if (!onPasswordValidation(password, passwordCheck)) return true;
+      console.log('password');
       setStep('profile'); 
     }
 
     setStepIndex(prevState => prevState + 1);
     
-  }, [userId, password, passwordCheck, userEmail]);
+  }, [userId, password, passwordCheck, userEmail, step]);
 
   const onImageChange = useCallback((e) => {
     e.preventDefault();
@@ -267,7 +278,6 @@ const SiginupForm = () => {
   }, [loginLoading])
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       router.replace('/');
     }
@@ -334,9 +344,8 @@ const SiginupForm = () => {
               />
             </div>
             <div className="btn-area">
-              <button type="button" className="btn" onClick={onNext}>
-                다음
-              </button>
+              <button type="button" className="btn__gray" onClick={onPrev}>이전</button>
+              <button type="button" className="btn" onClick={onNext}>다음</button>
             </div>
           </>
         )}
@@ -392,9 +401,8 @@ const SiginupForm = () => {
             </div>
             
             <div className="btn-area">
-              <button type="submit" className="btn">
-                등록
-              </button>
+              <button type="button" className="btn__gray" onClick={onPrev}>이전</button>
+              <button type="submit" className="btn">등록</button>
             </div>
           </>
         )}

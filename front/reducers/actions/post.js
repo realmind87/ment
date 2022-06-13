@@ -130,3 +130,16 @@ export const openPostModal = createAsyncThunk(
   },
 );
 
+
+export const search = createAsyncThunk(
+  'post/search',
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.get(`/posts/search?keyword=${data}`);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+

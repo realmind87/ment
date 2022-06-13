@@ -53,10 +53,11 @@ function Post() {
           <div className='post-info'>
             <p className='txt-nickname'>{detail.User.nickname}</p>
             <span className='txt-date'>{(()=>{
-              const date = new Date(detail.updatedAt);
+              const date = new Date(detail.createdAt);
               const year = date.getFullYear();
-              const month = date.getMonth();
-              const day = date.getDay();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              console.log(day)
               return `${year}년 ${month}월 ${day}일`
             })()}</span>
           </div>

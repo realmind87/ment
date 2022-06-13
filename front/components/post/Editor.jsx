@@ -11,18 +11,51 @@ const Editor = forwardRef((props, ref) => {
     const { detail, detailloading, imagePaths, imagesDone } = useSelector(postsSelector);
 
     const [controlList, setControlList] = useState([
-        {name: "B", style: "bold", isActive: false},
-        {name: "I", style: "italic", isActive: false},
-        {name: "U", style: "underline", isActive: false},
-    ])
+        {name: "B", style: "bold", isActive: false, icon: false},
+        {name: "I", style: "italic", isActive: false, icon: false},
+        {name: "U", style: "underline", isActive: false, icon: false},
+        {name: "left", style: "justifyLeft", isActive: false, icon: true},
+        {name: "center", style: "justifyCenter", isActive: false, icon: true},
+        {name: "right", style: "justifyRight", isActive: false, icon: true},
+    ]);
+
     const [files, setFiles] = useState(null);
-
     const control = useRef(null);
-
-    const editorContorl = useCallback((style, isActive) => {
-        setControlList(list => list.map(item => item.style === style ? { ...item, "isActive": !isActive } : item));
-        setStyle(style);
+    
+    const editorControl = useCallback((style, isActive) => {
+        setControlList(list => list.map(item => item.style === style ? {...item, "isActive": !isActive} : item));
+        setStyle(style, isActive);
     }, [])
+
+
+    const linkAddControl = useCallback(() => {
+        const link = prompt("Add Link");
+        document.execCommand("createLink", false, link); 
+    }, [])
+
+
+    const setStyle = useCallback((style, isActive) => {
+        if (isActive) {
+            document.execCommand('RemoveFormat', false, style);
+        } else {
+            document.execCommand(style);
+        }
+        focusEditor();
+    }, [])
+
+
+    // const codeAddControl = useCallback(() => {
+    //     if (codeActive) {
+    //         document.execCommand('RemoveFormat', false, null);
+    //         setCodeActive(false);
+    //     } else {
+    //         const selection = window.getSelection().toString();
+    //         const wrappedselection = `<code class='code'>${selection}</code>`;
+    //         document.execCommand('insertHTML', false, wrappedselection);
+    //         setCodeActive(true);
+    //     }
+    // }, [codeActive])
+
 
     const editorAddImage = useCallback((e) => {
         const files = e.target.files;
@@ -36,22 +69,6 @@ const Editor = forwardRef((props, ref) => {
         dispatch(uploadImages(imageFormData));
     }, [imagePaths])
 
-    // const imageRender = useCallback((files) => {
-    //     const file = files[0];
-    //     if (!!files) {
-    //         const reader = new FileReader();
-    //         reader.addEventListener('load', function (e) {
-    //             focusEditor();
-    //             document.execCommand('insertImage', false, `${backUrl}/${file.name}`);
-    //         });
-    //         reader.readAsDataURL(file);
-    //     }
-    // }, [imagePaths])
-
-    const setStyle = (style) => {
-        document.execCommand(style);
-        focusEditor();
-    }
 
     const focusEditor = () => {
         ref.current.focus({preventScroll: true});
@@ -77,7 +94,9 @@ const Editor = forwardRef((props, ref) => {
     return (
         <div className='editor-form'>
             <div ref={control} className='control-wrap'>
-                {controlList.map((item, index) => <button key={index} className={`${item.style} ${item.isActive ? "on" : ""}`} type="button" onClick={() => editorContorl(item.style, item.isActive)}>{item.name}</button>)}
+                {controlList.map((item, index) => <button key={index} className={`${item.style} ${item.icon ? "icon" : ""} ${item.isActive ? "on" : ""}`} type="button" onClick={() => editorControl(item.style, item.isActive)}>{item.name}</button>)}
+                <button type="button" className="icon link" onClick={linkAddControl}></button>
+                {/* <button type="button" className={`${codeActive ? "on" : ""}`} onClick={codeAddControl}>C</button> */}
                 <label className="img-area" htmlFor="img-content"></label>
                 <input
                     accept="image/*"
@@ -87,6 +106,7 @@ const Editor = forwardRef((props, ref) => {
                     multiple
                     onChange={editorAddImage}
                 />
+
             </div>
             <div className='editor-content'>
                 <div ref={ref} className='textarea' contentEditable='true'></div>

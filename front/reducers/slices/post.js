@@ -9,6 +9,7 @@ import {
   removePost,
   uploadImages,
   imageRemove,
+  search,
 } from '../actions/post';
 
 export const postSlice = createSlice({
@@ -49,6 +50,10 @@ export const postSlice = createSlice({
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+
+    searchLoading: false,
+    searchDone: false,
+    searchError: null,
 
     mainPosts: [],
     detail: null,
@@ -220,6 +225,21 @@ export const postSlice = createSlice({
         state.addCommentLoading = false;
         state.addCommentDone = false;
         state.addCommentError = action.payload;
+      })
+      .addCase(search.pending, (state, action) => {
+        state.searchLoading = false;
+        state.searchDone = false;
+        state.searchError = null;
+      })
+      .addCase(search.fulfilled, (state, action) => {
+        state.searchLoading = false;
+        state.searchDone = true;
+        state.mainPosts = action.payload.data;
+      })
+      .addCase(search.rejected, (state, action) => {
+        state.searchLoading = false;
+        state.searchDone = false;
+        state.searchError = action.payload;
       })
 });
 
