@@ -10,7 +10,7 @@ import { userInfo } from '@/reducers/actions/auth';
 import { userSelector } from '@/reducers/slices/user';
 import useApp from '@/hooks/useApp'
 import backUrl from '../../config'
-import { PostLayout, Posts } from '../components';
+import { PostLayout, Posts } from '@/components/index';
 
 function Hashtag() {
   const router = useRouter();
