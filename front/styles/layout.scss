@@ -117,25 +117,29 @@ body {
     }
 
     .user-menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 3.2rem;
+      height: 3.2rem;
       margin-left: .5rem;
       border-radius: 100%;
       border: 1px solid #eee;
+      flex-shrink: 0;
 
       &.none {
-        width: 3rem;
-        height: 3rem;
+        width: 4rem;
+        height: 4rem;
         margin-left: .5rem;
         text-indent: -9999px;
         background: url($path-img-ico + 'ico-avatar.svg') no-repeat 50% 50%;
-        background-size: 2.5rem;
+        background-size: 3rem;
         border: none;
       }
 
       img {
-        width: 40px;
+        height: 100%;
       }
     }
   }
@@ -295,7 +299,9 @@ body {
     overflow-y: auto;
     height: 25rem;
     padding: 1.5rem;
-    background-color: #fafafa;
+    border: 1px solid #efefef;
+    border-radius: 0.5rem;
+    //background-color: #fafafa;
 
     .textarea {
       width: 100%;
@@ -315,8 +321,7 @@ body {
         height: 4rem;
         padding: 1rem;
         border-radius: 1rem;
-        background-color: #000;
-        color: #fff;
+        background-color: #fafafa;
       }
   
       &.err {
@@ -392,11 +397,11 @@ body {
   }
 
   &__add {
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     text-indent: -9999px;
     background: url($path-img-ico + 'ico-add.svg') no-repeat 50% 50%;
-    background-size: 2.5rem;
+    background-size: 3rem;
   }
 
   &__search {
@@ -643,6 +648,14 @@ body {
       }
     }
   }
+
+  .posts-none {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    font-size: 1.8rem;
+  }
 }
 
 .modal-wrap {
@@ -686,6 +699,8 @@ body {
     .input-control {
       input[type='text'] {
         height: 4rem;
+        border:1px solid #efefef;
+        background-color: #fff;
       }
     }
 

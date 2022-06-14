@@ -44,17 +44,15 @@ const Editor = forwardRef((props, ref) => {
     }, [])
 
 
-    // const codeAddControl = useCallback(() => {
-    //     if (codeActive) {
-    //         document.execCommand('RemoveFormat', false, null);
-    //         setCodeActive(false);
-    //     } else {
-    //         const selection = window.getSelection().toString();
-    //         const wrappedselection = `<code class='code'>${selection}</code>`;
-    //         document.execCommand('insertHTML', false, wrappedselection);
-    //         setCodeActive(true);
-    //     }
-    // }, [codeActive])
+    const codeAddControl = useCallback(() => {
+        const selection = window.getSelection().toString();
+        const wrappedselection = `<code class='code'>${selection}</code>`;
+        const div = document.createElement('div');
+        const br = document.createElement('br');
+        document.execCommand('insertHTML', false, wrappedselection);
+        div.append(br);
+        ref.current.append(div);
+    }, [])
 
 
     const editorAddImage = useCallback((e) => {
@@ -96,7 +94,7 @@ const Editor = forwardRef((props, ref) => {
             <div ref={control} className='control-wrap'>
                 {controlList.map((item, index) => <button key={index} className={`${item.style} ${item.icon ? "icon" : ""} ${item.isActive ? "on" : ""}`} type="button" onClick={() => editorControl(item.style, item.isActive)}>{item.name}</button>)}
                 <button type="button" className="icon link" onClick={linkAddControl}></button>
-                {/* <button type="button" className={`${codeActive ? "on" : ""}`} onClick={codeAddControl}>C</button> */}
+                <button type="button" onClick={codeAddControl}>{`</>`}</button>
                 <label className="img-area" htmlFor="img-content"></label>
                 <input
                     accept="image/*"

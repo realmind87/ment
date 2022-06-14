@@ -9,7 +9,6 @@ const SearchForm = ({ set }) => {
   const app = useApp();
   const dispatch = useDispatch();
   
-
   // state
   const [keyword, setKeyword] = useState('');
 

@@ -56,7 +56,7 @@ const PostForm = () => {
     //   return false;
     return true;
   }, []);
-
+  
   const onImageChange = useCallback((e) => {
     e.preventDefault();
     const imageFormData = new FormData();
@@ -149,9 +149,7 @@ const PostForm = () => {
                     </div>
                   </li> */}
                   <li>
-                    <label className="tit-label" htmlFor="tit-input">
-                      제목
-                    </label>
+                    <label className="tit-label" htmlFor="tit-input">제목</label>
                     <div className="input-control">
                       <input
                         id="tit-input"
@@ -184,20 +182,14 @@ const PostForm = () => {
                       <div className='textarea' contentEditable='true'></div>
                     </div> */}
                     <Editor ref={editor} />
-                    
                   </li>
-
                 </ul>
                 <div className="btn-area">
-                  <button type="submit" className="btn">
-                    등록
-                  </button>
+                  <button type="submit" className="btn">등록</button>
                 </div>
               </form>
             </div>
-            <button type="button" className="btn__close" onClick={onClose}>
-              닫기
-            </button>
+            <button type="button" className="btn__close" onClick={onClose}>닫기</button>
           </div>
         </div>
       )}

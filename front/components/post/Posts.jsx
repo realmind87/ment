@@ -59,15 +59,22 @@ const Posts = () => {
   return (
     <>
       {addloading && skeletonList(1)}
-      {mainPosts.map((post) => (
-        <List
-          key={post.id}
-          id={post.id}
-          images={post.Images}
-          title={post.title}
-          content={post.content}
-        />
-      ))}
+    
+      {
+        mainPosts.length > 0 
+          ?
+            mainPosts.map((post) => (
+              <List
+                key={post.id}
+                id={post.id}
+                images={post.Images}
+                title={post.title}
+                content={post.content}
+              />
+            ))
+          : <p className='posts-none'>게시글이 없습니다.</p>
+      }
+
       {loadLoading && skeletonList(1)}
     </>
   );
