@@ -13,6 +13,7 @@ const PostForm = () => {
   const { imagePaths, openPostFrom } = useSelector(postsSelector);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [hashTags, setHashTags] = useState('');
 
   const [errTitle, setErrTitle] = useState(false);
   const [errContent, setErrContent] = useState(false);
@@ -34,26 +35,7 @@ const PostForm = () => {
   }, []);
 
   const onValidation = useCallback((title, content) => {
-    if (
-      validation(
-        title.length <= 0,
-        setTitle,
-        setErrTitle,
-        setErrTitleMsg,
-        '제목을 입력해 주세요.',
-      )
-    )
-      return false;
-    // if (
-    //   validation(
-    //     content.length <= 0,
-    //     setContent,
-    //     setErrContent,
-    //     setErrContentMsg,
-    //     '내용을 입력해 주세요.',
-    //   )
-    // )
-    //   return false;
+    if (validation(title.length <= 0, setTitle, setErrTitle, setErrTitleMsg, '제목을 입력해 주세요.')) return false;
     return true;
   }, []);
   
@@ -75,21 +57,22 @@ const PostForm = () => {
     setTitle(target.value);
   }, []);
 
-  // const onChangeContent = useCallback(({ target }) => {
-  //   setErrContent(false);
-  //   if (target.value <= 0) setErrContentMsg('내용');
-  //   setContent(target.value);
-  // }, []);
+  const onChangeHashTags = useCallback(({ target }) => {
+    setHashTags(target.value);
+  }, [])
 
   const onAddPost = useCallback((e) => {
       e.preventDefault();
+      
       if (!onValidation(title)) return true;
+
       const formData = new FormData();
       imagePaths.forEach((img) => {
         formData.append('image', img);
       });
       formData.append('title', title);
       formData.append('content', editor.current.innerHTML);
+      formData.append('hashtags', hashTags);
 
       dispatch(addPost(formData));
       dispatch(closePostState())
@@ -98,7 +81,7 @@ const PostForm = () => {
       setContent('');
       document.querySelector('#body').classList.remove('hidden');
     },
-    [imagePaths, title, content]);
+    [imagePaths, title, content, hashTags]);
 
   return (
     <Modal>
@@ -109,45 +92,6 @@ const PostForm = () => {
             <div className="modal-wrap__content">
               <form encType="multipart/form-data" onSubmit={onAddPost}>
                 <ul>
-                  {/* <li>
-                    <span className="tit-label">이미지</span>
-                    <div className="img-wrap">
-                      <div className="img-content">
-                        {imagePaths &&
-                          imagePaths.map((img, index) => (
-                            <div key={index} className="img-pre-view">
-                              <div className="img-area">
-                                <img src={`${backUrl}/${img}`} />
-                              </div>
-                              <button
-                                type="button"
-                                className="btn-del"
-                                onClick={() => onImageRemove(index)}
-                              >
-                                삭제
-                              </button>
-                            </div>
-                          ))}
-
-                        {imagePaths && imagePaths.length === 0 && (
-                          <>
-                            <label
-                              className="img-area"
-                              htmlFor="img-input"
-                            ></label>
-                            <input
-                              accept="image/*"
-                              type="file"
-                              id="img-input"
-                              name="image"
-                              multiple
-                              onChange={onImageChange}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </li> */}
                   <li>
                     <label className="tit-label" htmlFor="tit-input">제목</label>
                     <div className="input-control">
@@ -161,28 +105,25 @@ const PostForm = () => {
                       />
                     </div>
                   </li>
-                  {/* <li>
-                    <label className="tit-label" htmlFor="textarea">
-                      내용
-                    </label>
-                    <div className="input-control">
-                      <textarea
-                        id="textarea"
-                        className={errContent ? 'err' : ''}
-                        placeholder={errContentMsg}
-                        value={content}
-                        onChange={onChangeContent}
-                      />
-                    </div>
-                  </li> */}
 
                   <li>
                     <label className="tit-label" htmlFor="textarea">내용</label>
-                    {/* <div className='editor-form'>
-                      <div className='textarea' contentEditable='true'></div>
-                    </div> */}
                     <Editor ref={editor} />
                   </li>
+
+                  <li>
+                    <label className="tit-label" htmlFor="hashtag-input">해쉬태그</label>
+                    <div className="input-control">
+                      <input
+                        id="hashtag-input"
+                        type="text"
+                        placeholder="#해쉬태그 입력"
+                        value={hashTags}
+                        onChange={onChangeHashTags}
+                      />
+                    </div>
+                  </li>
+
                 </ul>
                 <div className="btn-area">
                   <button type="submit" className="btn">등록</button>

@@ -10,7 +10,11 @@ import {
   uploadImages,
   imageRemove,
   search,
+  likePost,
+  unLikePost
 } from '../actions/post';
+import _find from 'lodash/find';
+import _remove from 'lodash/remove';
 
 export const postSlice = createSlice({
   name: 'post',
@@ -55,7 +59,16 @@ export const postSlice = createSlice({
     searchDone: false,
     searchError: null,
 
+    likeLoading: false,
+    likeDone: false,
+    likeError: null,
+
+    unLikeLoading: false,
+    unLikeDone: false,
+    unLikeError: null,
+
     mainPosts: [],
+    postLikes: [],
     detail: null,
     comment: null,
     hasMorePosts: true,
@@ -211,6 +224,7 @@ export const postSlice = createSlice({
         state.commentDone = false;
         state.commentError = action.payload;
       })
+
       .addCase(addComment.pending, (state, action) => {
         state.addCommentLoading = true;
         state.addCommentDone = false;
@@ -226,8 +240,9 @@ export const postSlice = createSlice({
         state.addCommentDone = false;
         state.addCommentError = action.payload;
       })
+
       .addCase(search.pending, (state, action) => {
-        state.searchLoading = false;
+        state.searchLoading = true;
         state.searchDone = false;
         state.searchError = null;
       })
@@ -241,7 +256,44 @@ export const postSlice = createSlice({
         state.searchDone = false;
         state.searchError = action.payload;
       })
+
+
+
+      .addCase(likePost.pending, (state, action) => {
+        state.likeLoading = true;
+        state.likeDone = false;
+        state.likeError = null;
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.likeLoading = false;
+        //state.postLikes = action.payload.data.
+        state.likeDone = true;
+      })
+      .addCase(likePost.rejected, (state, action) => {
+        state.likeLoading = false;
+        state.likeDone = false;
+        state.likeError = action.payload;
+      })
+      .addCase(unLikePost.pending, (state, action) => {
+        state.unLikeLoading = true;
+        state.unLikeDone = false;
+        state.unLikeError = null;
+      })
+      .addCase(unLikePost.fulfilled, (state, action) => {
+        state.unLikeLoading = false;
+        state.unLikeDone = true;
+      })
+      .addCase(unLikePost.rejected, (state, action) => {
+        state.unLikeLoading = false;
+        state.unLikeDone = false;
+        state.unLikeError = action.payload;
+      })
 });
+
+/*
+  likePost,
+  unLikePost
+*/
 
 export const { clearPostState, clearPostRemove, openPostState, closePostState } = postSlice.actions;
 export const postsSelector = (state) => state.post;

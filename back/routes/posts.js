@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
 const { or, and, like } = Op;
-const { Post, Image, User, Comment } = require("../models");
+const { Post, Image, User, Comment, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 router.get("/", async (req, res, next) => {
@@ -19,7 +19,18 @@ router.get("/", async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["id", "userid"],
+          attributes: ["id", "userid", "nickname"],
+          include: [{
+            model: Image
+          }]
+        },
+        {
+          model: User, // 좋아요 누른 사람
+          as: 'Likers',
+          attributes: ['id'],
+        },
+        {
+          model: Comment,
         },
         {
           model: Image,

@@ -51,7 +51,7 @@ const Posts = () => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, [hasMorePosts, loadLoading, mainPosts]);
-
+  
   if (initPostLoading) return skeletonList(10);
   if (searchError) return <SearchDataNone keyword={keyword}  hasMorePosts={hasMorePosts} loadLoading={loadLoading} mainPosts={mainPosts} />;
   if (!mainPosts) return null;
@@ -70,6 +70,9 @@ const Posts = () => {
                 images={post.Images}
                 title={post.title}
                 content={post.content}
+                user={post.User}
+                likers={post.Likers}
+                comments={post.Comments}
               />
             ))
           : <p className='posts-none'>게시글이 없습니다.</p>

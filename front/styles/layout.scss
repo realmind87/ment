@@ -433,6 +433,19 @@ body {
     }
   }
 
+  &__like {
+    width: 2rem;
+    height: 2rem;
+    text-indent: -9999px;
+    background: url($path-img-ico + 'ico-like.svg') no-repeat 50% 50%;
+    background-size: cover;
+    cursor: pointer;
+
+    &.on {
+      background: url($path-img-ico + 'ico-like-on.svg') no-repeat 50% 50%;
+    }
+  }
+
   &:hover {
     background-color: #aa0303;
   }
@@ -588,9 +601,6 @@ body {
   }
 }
 
-
-
-
 /* post */
 .post-content {
   padding-top: 5rem;
@@ -645,6 +655,51 @@ body {
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+      }
+    }
+  }
+
+  .post-box-info {
+    ul {
+      display: flex;
+      align-items: center;
+      
+      li {
+        display: flex;
+        align-items: center;
+        height: 2rem;
+        margin-right: 1rem;
+        color: #666;
+
+        strong {
+          display: inline-block;
+          color: #333;
+        }
+
+        .small-thumnail {
+          overflow: hidden;
+          width: 2rem;
+          height: 2rem;
+          border-radius: 100%;
+          border:1px solid #efefef;
+          margin-right: 0.5rem;
+          background: url($path-img-ico + 'ico-avatar.svg') no-repeat 50% 50%;
+          background-size: cover;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        &.ico {
+          padding-left: 2rem;
+          background-position: 0 50%;
+          background-repeat: no-repeat;
+          background-size: 1.4rem;
+        }
+        &.like {
+          background-image: url($path-img-ico + 'ico-like.svg');
+        }
       }
     }
   }
@@ -868,6 +923,7 @@ body {
       }
   
       .post-info {
+        position: relative;
         display: flex;
         margin-top: 1.5rem;
         align-items: center;
@@ -883,6 +939,30 @@ body {
           font-size:1.2rem;
           color: #666;
         }
+
+        .small-thumnail {
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 3rem;
+          height: 3rem;
+          margin-right: 0.5rem;
+          border-radius: 100%;
+          border:1px solid #efefef;
+          background: url($path-img-ico + 'ico-avatar.svg') no-repeat 50% 50%;
+          background-size: cover;
+          
+          img {
+            width: 100%;
+          }
+        }
+
+        .btn__like {
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
       }
     }
 
@@ -893,9 +973,33 @@ body {
         max-width: 100%;
       }
 
+      .code {
+        display: block;
+        width: 100%;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: #efefef;
+      }
+      
       a {
         color: blue;
         text-decoration: underline;
+      }
+    }
+
+    .hash-tags {
+      margin-top: 1rem;
+
+      ul {
+        display: flex;
+        align-items: center;
+        
+        li {
+          margin-right: 1rem;
+          font-size: 1.4rem;
+          color: #0679C0;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -1256,6 +1360,7 @@ body {
   
         .txt-info {
           width: 100%;
+          height: 3rem;
           margin-top: 0.8rem;
           font-size: 1.2rem;
           font-weight: $font-regular;

@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, User, Comment, Image } = require("../models");
+const { Post, User, Comment, Image, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const multer = require("multer");
 const path = require("path");
@@ -50,11 +50,19 @@ const upload = multer({
 
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    const hashtags = req.body.hashtags.match(/#[^\s#]+/g);
     const post = await Post.create({
       title: req.body.title,
       content: req.body.content,
       UserId: req.user.id,
     });
+
+    if (hashtags) {
+      const result = await Promise.all(hashtags.map((tag)=> Hashtag.findOrCreate({
+        where: {name: tag.slice(1).toLowerCase()}
+      })));
+      await post.addHashtags(result.map(v => v[0]));
+    }
 
     if (req.body.image) {
       if (Array.isArray(req.body.image)) {
@@ -84,8 +92,16 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
           ],
         },
         {
+          model: User, // 좋아요 누른 사람
+          as: 'Likers',
+          attributes: ['id'],
+        },
+        {
           model: User, // 게시글 작성자
           attributes: ["id", "userid", 'nickname'],
+          include: [{
+            model: Image
+          }]
         },
       ],
     });
@@ -105,6 +121,9 @@ router.get("/detail", async (req, res, next) => {
         {
           model: User,
           attributes: ["id", "userid", 'nickname'],
+          include: [{
+            model: Image
+          }]
         },
         {
           model: Comment,
@@ -114,6 +133,14 @@ router.get("/detail", async (req, res, next) => {
               attributes: ["id", "userid"],
             },
           ],
+        },
+        {
+          model: User, // 좋아요 누른 사람
+          as: 'Likers',
+          attributes: ['id'],
+        },
+        {
+          model: Hashtag,
         },
         {
           model: Image,
@@ -178,6 +205,33 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post =  await Post.findOne({ where : { id: req.params.postId } })
+    if (!post) return res.status(403).send('게시글이 존재하지 않습니다.')
+    await post.addLikers(req.user.id)
+    res.json({ PostId: post.id, UserId: req.user.id })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
+router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post =  await Post.findOne({ where : { id: req.params.postId } })
+    if (!post) return res.status(403).send('게시글이 존재하지 않습니다.')
+    await post.removeLikers(req.user.id)
+
+    res.json({ PostId: post.id, UserId: req.user.id })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+
+})
+
 
 router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   try {

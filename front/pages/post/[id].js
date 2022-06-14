@@ -1,33 +1,48 @@
-import { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { wrapper } from '../../store';
 import { postsSelector } from '@/reducers/slices/post';
 import { DetailLayout } from '@/components/index';
-import { loadDetail } from '@/reducers/actions/post';
+import { loadDetail, likePost, unLikePost, removePost } from '@/reducers/actions/post';
 import { userInfo } from '@/reducers/actions/auth';
 import { userSelector } from '@/reducers/slices/user';
-import { removePost } from '@/reducers/actions/post';
 import CommendForm from '@/components/layouts/CommendForm'
 import useApp from '@/hooks/useApp'
 import backUrl from '../../config'
 
 function Post() {
   const router = useRouter();
-  const { detail, detailloading } = useSelector(postsSelector);
+  const dispatch = useDispatch();
+  const { detail, detailloading, mainPosts } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
   const currentUserId = user?.id;
+  const like = detail.Likers.find(v => v.id === currentUserId);
+  const [ liked, setliked ] = useState(like ? true : false);
 
   const app = useApp();
-
   const onRemovePost = useCallback(() =>  dispatch(removePost(detail.id)), []);
-
   const onCommendRouter = useCallback((id) => {
     router.push({
       pathname: `/comment/${id}`,
     });
   }, []);
+  
+  const onHashTagLoad = useCallback((hashtag)=>{
+    // const {} = hashtag;
+    // dispatch()
+  }, [])
+
+  const onLike = useCallback(async (id)=>{
+    dispatch(likePost(id))
+    setliked(true);
+  }, []);
+
+  const onUnLike = useCallback((id)=>{
+    dispatch(unLikePost(id))
+    setliked(false);
+  }, [])
   
   if (detailloading) return <SkeletonDetail />;
   if (!detail) return null;
@@ -50,19 +65,37 @@ function Post() {
       <section className="content">
         <div className='content__header'>
           <h1>{detail.title}</h1>
+
           <div className='post-info'>
+            <div className='small-thumnail'><img src={`${backUrl}/${detail.User.Images[0].src}`} /></div>
             <p className='txt-nickname'>{detail.User.nickname}</p>
             <span className='txt-date'>{(()=>{
               const date = new Date(detail.createdAt);
               const year = date.getFullYear();
               const month = date.getMonth() + 1;
               const day = date.getDate();
-              console.log(day)
               return `${year}년 ${month}월 ${day}일`
             })()}</span>
+
+            {liked 
+              ? <button className='btn__like on' type="button" onClick={() => onUnLike(detail.id)}>좋아요 취소</button>
+              : <button className='btn__like' type="button" onClick={() => onLike(detail.id)}>좋아요</button>
+            }
+            
           </div>
+          
         </div>
         <div className='content__area' dangerouslySetInnerHTML={{__html: detail.content}}></div>
+        
+        <div className='hash-tags'>
+          {
+            detail.Hashtags.length > 0 && (
+              <ul>
+                {detail.Hashtags.map((hashtag, index) => <li key={index} onClick={() => onHashTagLoad(hashtag)}>#{hashtag.name}</li>)}
+              </ul>
+            )
+          }
+        </div>
       </section>
         
       {
@@ -108,9 +141,7 @@ function Post() {
                     )
                   }
                 </div>
-                
                 {user && <CommendForm id={detail.id} />}
-
               </div>
             )
       }

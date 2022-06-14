@@ -143,3 +143,29 @@ export const search = createAsyncThunk(
   },
 );
 
+
+export const likePost = createAsyncThunk(
+  'post/likePost',
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.patch(`/post/${data}/like`);
+      console.log(response)
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const unLikePost = createAsyncThunk(
+  'post/unLikePost',
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.delete(`/post/${data}/like`);
+      console.log(response)
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
