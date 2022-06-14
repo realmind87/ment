@@ -608,9 +608,10 @@ body {
 
   .post-box {
     display: flex;
-    height: 9rem;
+    height: 12rem;
     padding: 0 1.5rem;
     align-items: center;
+    border-bottom:1px solid #efefef;
 
     &__thumb {
       overflow: hidden;
@@ -1332,20 +1333,20 @@ body {
     padding-top: 8rem;
   
     .post-box {
-      height: 12rem;
+      height: 16rem;
       padding: 0 3rem;
       border: 1px solid #efefef;
       border-radius: 1rem;
       margin-bottom: 2rem;
       
       &__thumb {
-        width: 8rem;
-        height: 8rem;
+        width: 10rem;
+        height: 10rem;
       }
   
       &__area {
         width: calc(100% - (6rem + 1.5rem));
-        margin-left: 1.5rem;
+        margin-left: 2rem;
         
         .tit {
           width: 100%;
@@ -1360,7 +1361,7 @@ body {
   
         .txt-info {
           width: 100%;
-          height: 3rem;
+          height: 4.5rem;
           margin-top: 0.8rem;
           font-size: 1.2rem;
           font-weight: $font-regular;
