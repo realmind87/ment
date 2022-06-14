@@ -28,18 +28,28 @@ function Post() {
       pathname: `/comment/${id}`,
     });
   }, []);
-  
+
   const onHashTagLoad = useCallback((hashtag)=>{
     // const {} = hashtag;
     // dispatch()
   }, [])
 
   const onLike = useCallback(async (id)=>{
+    if (!user) {
+      alert("로그인 부탁드립니다.");
+      router.push({pathname: '/intro'});
+      return true;
+    }
     dispatch(likePost(id))
     setliked(true);
   }, []);
 
   const onUnLike = useCallback((id)=>{
+    if (!user) {
+      alert("로그인 부탁드립니다.");
+      router.push({pathname: '/intro'});
+      return true;
+    }
     dispatch(unLikePost(id))
     setliked(false);
   }, [])

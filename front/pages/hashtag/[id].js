@@ -17,8 +17,7 @@ function Hashtag() {
   const dispatch = useDispatch();
   const { detail, detailloading, mainPosts } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
-
-  
+    
   const onHashTagLoad = useCallback((hashtag)=>{
     // const {} = hashtag;
     // dispatch()
