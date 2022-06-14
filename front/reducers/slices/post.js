@@ -70,7 +70,7 @@ export const postSlice = createSlice({
     mainPosts: [],
     postLikes: [],
     detail: null,
-    comment: null,
+    comments: [],
     hasMorePosts: true,
     imagePaths: [],
     openPostFrom: false,
@@ -217,7 +217,7 @@ export const postSlice = createSlice({
       .addCase(loadComment.fulfilled, (state, action) => {
         state.commentLoading = false;
         state.commentDone = true;
-        state.comment = action.payload.data;
+        state.comments = action.payload.data;
       })
       .addCase(loadComment.rejected, (state, action) => {
         state.commentLoading = false;
@@ -233,7 +233,7 @@ export const postSlice = createSlice({
       .addCase(addComment.fulfilled, (state, action) => {
         state.addCommentLoading = false;
         state.addCommentDone = true;
-        state.comment.push(action.payload.data);
+        state.comments.push(action.payload.data);
       })
       .addCase(addComment.rejected, (state, action) => {
         state.addCommentLoading = false;
@@ -256,9 +256,6 @@ export const postSlice = createSlice({
         state.searchDone = false;
         state.searchError = action.payload;
       })
-
-
-
       .addCase(likePost.pending, (state, action) => {
         state.likeLoading = true;
         state.likeDone = false;
@@ -266,7 +263,6 @@ export const postSlice = createSlice({
       })
       .addCase(likePost.fulfilled, (state, action) => {
         state.likeLoading = false;
-        //state.postLikes = action.payload.data.
         state.likeDone = true;
       })
       .addCase(likePost.rejected, (state, action) => {

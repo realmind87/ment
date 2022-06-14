@@ -5,7 +5,7 @@ import axios from 'axios';
 import { wrapper } from '../../store';
 import { postsSelector } from '@/reducers/slices/post';
 import { DetailLayout } from '@/components/index';
-import { loadDetail, likePost, unLikePost, removePost } from '@/reducers/actions/post';
+import { loadDetail, likePost, unLikePost, removePost, loadComment } from '@/reducers/actions/post';
 import { userInfo } from '@/reducers/actions/auth';
 import { userSelector } from '@/reducers/slices/user';
 import CommendForm from '@/components/layouts/CommendForm'
@@ -15,11 +15,13 @@ import backUrl from '../../config'
 function Post() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { detail, detailloading, mainPosts } = useSelector(postsSelector);
+  const { detail, detailloading, comments } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
   const currentUserId = user?.id;
   const like = detail.Likers.find(v => v.id === currentUserId);
   const [ liked, setliked ] = useState(like ? true : false);
+
+  console.log(comments)
 
   const app = useApp();
   const onRemovePost = useCallback(() =>  dispatch(removePost(detail.id)), []);
@@ -115,11 +117,11 @@ function Post() {
               <div className="commend-area" onClick={() => onCommendRouter(detail.id)}>
                 <div className="commend-area__info">
                   <strong>댓글</strong>
-                  <span>{detail.Comments.length}</span>
+                  <span>{comments.length}</span>
                 </div>
                 <div className="commend-area__content">
-                  {detail.Comments.length !== 0 ? (
-                    <p>{detail.Comments[0].content}</p>
+                  {comments.length !== 0 ? (
+                    <p>{comments[0].content}</p>
                   ) : (
                     <p>작성된 댓글이 없습니다.</p>
                   )}
@@ -130,13 +132,13 @@ function Post() {
               <div className="commend-area">
                 <div className="commend-area__info">
                   <strong>댓글</strong>
-                  <span>{detail.Comments.length}</span>
+                  <span>{comments.length}</span>
                 </div>
                 <div className="commend-area__content">
-                  {detail.Comments.length !== 0 
+                  {comments.length !== 0 
                     ? (
                       <ul className='list'>
-                        {detail.Comments.map((item, index) => 
+                        {comments.map((item, index) => 
                           <li key={index}>
                               <div className="user-info">
                                   <div className="user-thum" />
@@ -191,6 +193,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
     await store.dispatch(userInfo());
     await store.dispatch(loadDetail(context.params.id));
+    await store.dispatch(loadComment(context.params.id));
 
     // const { user } = store.getState().user;
 

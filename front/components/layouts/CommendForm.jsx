@@ -11,19 +11,17 @@ const CommendForm = ({ id }) => {
       setComment(target.value);
     }, []);
   
-    const onPutCommend = useCallback(
-      () => dispatch(addComment({ content: comment, postId })),
-      [comment],
-    );
+    const onPutCommend = useCallback(() => {
+      dispatch(addComment({ content: comment, postId }))
+      setComment("");
+    }, [comment]);
       
     return (
       <div className="commend-wrap__form">
         <div className="input-control">
           <input type="text" value={comment} onChange={onChangeCommend} />
         </div>
-        <button type="button" className="btn" onClick={onPutCommend}>
-          등록
-        </button>
+        <button type="button" className="btn" onClick={onPutCommend}>등록</button>
       </div>
     )
 }
