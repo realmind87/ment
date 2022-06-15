@@ -55,9 +55,26 @@ router.get("/search", async (req, res, next) => {
             { content: {[like]: `%${keyword}%`}}
           ]
         },
-        include: [{
-          model: Image,
-        }],
+        include: [
+          {
+            model: Image,
+          },
+          {
+            model: User, // 좋아요 누른 사람
+            as: 'Likers',
+            attributes: ['id'],
+          },
+          {
+            model: Comment,
+          },
+          {
+            model: User, // 게시글 작성자
+            attributes: ["id", "userid", 'nickname'],
+            include: [{
+              model: Image
+            }]
+          }
+        ],
       })
       if (searchDiary.length === 0) return res.status(401).json({message: '검색과 일치하는 내용의 일기가 없습니다.'})
       res.status(200).json(searchDiary);
