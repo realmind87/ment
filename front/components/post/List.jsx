@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-//import {} from '@/reducers/slices/post'
 import { useRouter } from 'next/router'
 import backUrl from '../../config'
 

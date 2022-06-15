@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postsSelector, clearPostState } from '@/reducers/slices/post';
 import { librarySelector } from '@/reducers/slices/library';
 import { loadPost, search, initPost } from '@/reducers/actions/post';
-import { useRouter } from 'next/router';
 
 import List from './List';
 import SkeletonList from './SkeletonList';
@@ -19,18 +18,8 @@ const skeletonList = (number) => {
 
 const Posts = () => {
   const dispatch = useDispatch();
-  const {
-    mainPosts,
-    hasMorePosts,
-    loadLoading,
-    addloading,
-    initPostError,
-    initPostLoading,
-    searchError,
-  } = useSelector(postsSelector);
+  const { mainPosts, hasMorePosts, loadLoading, addloading, initPostError, initPostLoading, searchError } = useSelector(postsSelector);
   const { keyword } = useSelector(librarySelector)
-
-  const router = useRouter();
 
   useEffect(() => {
     return () => dispatch(clearPostState());
@@ -38,10 +27,7 @@ const Posts = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      if (
-        window.pageYOffset + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 10
-      ) {
+      if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 10) {
         if (hasMorePosts && !loadLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch(loadPost(lastId));
@@ -55,27 +41,26 @@ const Posts = () => {
   if (initPostLoading) return skeletonList(10);
   if (searchError) return <SearchDataNone keyword={keyword}  hasMorePosts={hasMorePosts} loadLoading={loadLoading} mainPosts={mainPosts} />;
   if (!mainPosts) return null;
-
+  
   return (
     <>
       {addloading && skeletonList(1)}
     
-      {
-        mainPosts.length > 0 
-          ?
-            mainPosts.map((post) => (
-              <List
-                key={post.id}
-                id={post.id}
-                images={post.Images}
-                title={post.title}
-                content={post.content}
-                user={post.User}
-                likers={post.Likers}
-                comments={post.Comments}
-              />
-            ))
-          : <p className='posts-none'>게시글이 없습니다.</p>
+      {mainPosts.length > 0 
+        ?
+          mainPosts.map((post) => (
+            <List
+              key={post.id}
+              id={post.id}
+              images={post.Images}
+              title={post.title}
+              content={post.content}
+              user={post.User}
+              likers={post.Likers}
+              comments={post.Comments}
+            />
+          ))
+        : <p className='posts-none'>게시글이 없습니다.</p>
       }
 
       {loadLoading && skeletonList(1)}

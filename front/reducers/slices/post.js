@@ -11,7 +11,8 @@ import {
   imageRemove,
   search,
   likePost,
-  unLikePost
+  unLikePost,
+  loadHashTagPosts
 } from '../actions/post';
 import _find from 'lodash/find';
 import _remove from 'lodash/remove';
@@ -283,6 +284,22 @@ export const postSlice = createSlice({
         state.unLikeLoading = false;
         state.unLikeDone = false;
         state.unLikeError = action.payload;
+      })
+      .addCase(loadHashTagPosts.pending, (state, action) => {
+        state.loadLoading = true;
+        state.loadDone = false;
+        state.loadError = null;
+      })
+      .addCase(loadHashTagPosts.fulfilled, (state, action) => {
+        state.loadLoading = false;
+        state.loadDone = true;
+        state.mainPosts = state.mainPosts.concat(action.payload.data);
+        state.hasMorePosts = action.payload.data.length === 10;
+      })
+      .addCase(loadHashTagPosts.rejected, (state, action) => {
+        state.loadLoading = false;
+        state.loadDone = false;
+        state.loadError = action.payload;
       })
 });
 

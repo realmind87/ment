@@ -17,11 +17,8 @@ export const initPost = createAsyncThunk('post/init', async (thunkAPI) => {
   }
 });
 
-export const loadPost = createAsyncThunk(
-  'post/loadPost',
-  async (lastId, thunkAPI) => {
+export const loadPost = createAsyncThunk('post/loadPost', async (lastId, thunkAPI) => {
     try {
-      console.log(lastId);
       const response = await axios.get(`/posts?lastId=${lastId || 0}`);
       return delay(1000, response);
     } catch (error) {
@@ -30,9 +27,7 @@ export const loadPost = createAsyncThunk(
   },
 );
 
-export const addPost = createAsyncThunk(
-  'post/addPost',
-  async (data, thunkAPI) => {
+export const addPost = createAsyncThunk('post/addPost', async (data, thunkAPI) => {
     try {
       const response = await axios.post('/post', data);
       return response;
@@ -42,9 +37,7 @@ export const addPost = createAsyncThunk(
   },
 );
 
-export const loadDetail = createAsyncThunk(
-  'post/loadDetail',
-  async (postId, thunkAPI) => {
+export const loadDetail = createAsyncThunk('post/loadDetail', async (postId, thunkAPI) => {
     try {
       console.log(postId);
       const response = await axios.get(`/post/detail?postId=${postId}`);
@@ -55,9 +48,7 @@ export const loadDetail = createAsyncThunk(
   },
 );
 
-export const loadComment = createAsyncThunk(
-  'post/loadComment',
-  async (id, thunkAPI) => {
+export const loadComment = createAsyncThunk('post/loadComment', async (id, thunkAPI) => {
     try {
       const response = await axios.get(`/post/comment?postId=${id}`);
       return response;
@@ -67,9 +58,7 @@ export const loadComment = createAsyncThunk(
   },
 );
 
-export const addComment = createAsyncThunk(
-  'post/addComment',
-  async ({ content, postId }, thunkAPI) => {
+export const addComment = createAsyncThunk('post/addComment', async ({ content, postId }, thunkAPI) => {
     console.log(content, postId);
     try {
       const response = await axios.post(`/post/${postId}/comment`, {
@@ -83,9 +72,7 @@ export const addComment = createAsyncThunk(
   },
 );
 
-export const removePost = createAsyncThunk(
-  'post/removePost',
-  async (postId, thunkAPI) => {
+export const removePost = createAsyncThunk('post/removePost', async (postId, thunkAPI) => {
     try {
       const response = await axios.delete(`/post/${postId}`);
       return response;
@@ -95,9 +82,7 @@ export const removePost = createAsyncThunk(
   },
 );
 
-export const uploadImages = createAsyncThunk(
-  'post/uploadImages',
-  async (data, thunkAPI) => {
+export const uploadImages = createAsyncThunk('post/uploadImages', async (data, thunkAPI) => {
     try {
       const response = await axios.post('/post/images', data);
       console.log(response.data);
@@ -108,9 +93,7 @@ export const uploadImages = createAsyncThunk(
   },
 );
 
-export const imageRemove = createAsyncThunk(
-  'post/imageRemove',
-  async (data, thunkAPI) => {
+export const imageRemove = createAsyncThunk('post/imageRemove', async (data, thunkAPI) => {
     try {
       return data;
     } catch (error) {
@@ -119,9 +102,7 @@ export const imageRemove = createAsyncThunk(
   },
 );
 
-export const openPostModal = createAsyncThunk(
-  'post/openPostModal',
-  async (data, thunkAPI) => {
+export const openPostModal = createAsyncThunk('post/openPostModal', async (data, thunkAPI) => {
     try {
       return data;
     } catch (error) {
@@ -131,9 +112,7 @@ export const openPostModal = createAsyncThunk(
 );
 
 
-export const search = createAsyncThunk(
-  'post/search',
-  async (data, thunkAPI) => {
+export const search = createAsyncThunk('post/search', async (data, thunkAPI) => {
     try {
       const response = await axios.get(`/posts/search?keyword=${data}`);
       return response;
@@ -144,9 +123,7 @@ export const search = createAsyncThunk(
 );
 
 
-export const likePost = createAsyncThunk(
-  'post/likePost',
-  async (data, thunkAPI) => {
+export const likePost = createAsyncThunk('post/likePost', async (data, thunkAPI) => {
     try {
       const response = await axios.patch(`/post/${data}/like`);
       console.log(response)
@@ -157,9 +134,7 @@ export const likePost = createAsyncThunk(
   },
 );
 
-export const unLikePost = createAsyncThunk(
-  'post/unLikePost',
-  async (data, thunkAPI) => {
+export const unLikePost = createAsyncThunk('post/unLikePost', async (data, thunkAPI) => {
     try {
       const response = await axios.delete(`/post/${data}/like`);
       console.log(response)
@@ -169,3 +144,12 @@ export const unLikePost = createAsyncThunk(
     }
   },
 );
+
+export const loadHashTagPosts = createAsyncThunk('post/loadHashTagPosts', async (data, thunkAPI) => {
+  try {
+    const response = await axios.get(`/hashtag/${encodeURIComponent(data.hashtag)}?last=${data?.lastId || 0}`)
+    return response
+  } catch(error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+})

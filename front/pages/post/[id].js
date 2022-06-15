@@ -10,6 +10,7 @@ import { userInfo } from '@/reducers/actions/auth';
 import { userSelector } from '@/reducers/slices/user';
 import CommendForm from '@/components/layouts/CommendForm'
 import useApp from '@/hooks/useApp'
+import Link from 'next/link';
 import backUrl from '../../config'
 
 function Post() {
@@ -21,8 +22,6 @@ function Post() {
   const like = detail.Likers.find(v => v.id === currentUserId);
   const [ liked, setliked ] = useState(like ? true : false);
 
-  console.log(comments)
-
   const app = useApp();
   const onRemovePost = useCallback(() =>  dispatch(removePost(detail.id)), []);
   const onCommendRouter = useCallback((id) => {
@@ -30,11 +29,6 @@ function Post() {
       pathname: `/comment/${id}`,
     });
   }, []);
-
-  const onHashTagLoad = useCallback((hashtag)=>{
-    // const {} = hashtag;
-    // dispatch()
-  }, [])
 
   const onLike = useCallback(async (id)=>{
     if (!user) {
@@ -88,26 +82,27 @@ function Post() {
               const day = date.getDate();
               return `${year}년 ${month}월 ${day}일`
             })()}</span>
-
+            
             {liked 
               ? <button className='btn__like on' type="button" onClick={() => onUnLike(detail.id)}>좋아요 취소</button>
               : <button className='btn__like' type="button" onClick={() => onLike(detail.id)}>좋아요</button>
             }
             
           </div>
+
+          <div className='hash-tags'>
+            {
+              detail.Hashtags.length > 0 && (
+                <ul>
+                  {detail.Hashtags.map((hashtag, index) => <li key={index}><Link href={`/hashtag/${hashtag.name}`}><a>#{hashtag.name}</a></Link></li>)}
+                </ul>
+              )
+            }
+          </div>
           
         </div>
-        <div className='content__area' dangerouslySetInnerHTML={{__html: detail.content}}></div>
         
-        <div className='hash-tags'>
-          {
-            detail.Hashtags.length > 0 && (
-              <ul>
-                {detail.Hashtags.map((hashtag, index) => <li key={index} onClick={() => onHashTagLoad(hashtag)}>#{hashtag.name}</li>)}
-              </ul>
-            )
-          }
-        </div>
+        <div className='content__area' dangerouslySetInnerHTML={{__html: detail.content}}></div>
       </section>
         
       {

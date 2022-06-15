@@ -6,6 +6,7 @@
             "@/styles/*": ["styles/*"],
             "@/reducers/*": ["reducers/*"],
             "@/hooks/*": ["hooks/*"],
+            "@/store/*": ["store/*"],
         }
     }
 }
